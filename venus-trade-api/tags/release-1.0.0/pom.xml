@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>cn.com.mx</groupId>
+      	<artifactId>venus-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../../venus-parent</relativePath>
+	</parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>venus-trade-api</artifactId>
+    <version>${venus-trade-api.version}</version>
+
+    <dependencies>
+        <dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-common</artifactId>
+			<version>${venus-common.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>io.terminus.pampas</groupId>
+            <artifactId>pampas-client</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>cn.com.mx</groupId>
+            <artifactId>venus-pay-api</artifactId>
+            <version>${venus-pay.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.terminus</groupId>
+            <artifactId>terminus-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.terminus.pampas</groupId>
+            <artifactId>pampas-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.com.mx</groupId>
+            <artifactId>venus-item-api</artifactId>
+            <version>${venus-item-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.com.mx</groupId>
+            <artifactId>venus-shop-api</artifactId>
+            <version>${venus-shop-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.com.mx</groupId>
+            <artifactId>venus-pay-api</artifactId>
+            <version>${venus-pay-api.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>cn.com.mx</groupId>
+            <artifactId>venus-plugin-api</artifactId>
+            <version>${venus-plugin-api.version}</version>
+        </dependency>
+    </dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<charset>UTF-8</charset>
+					<encoding>UTF-8</encoding>
+					<docencoding>UTF-8</docencoding>
+					<tags>
+						<tag>
+							<name>Description</name>
+							<placement>a</placement>
+							<head>描述</head>
+						</tag>
+						<tag>
+							<name>author</name>
+							<placement>a</placement>
+							<head>作者</head>
+						</tag>
+						<tag>
+							<name>date</name>
+							<placement>a</placement>
+							<head>时间</head>
+						</tag>
+					</tags>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>	
+</project>
