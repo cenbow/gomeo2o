@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+            http://www.springframework.org/schema/beans/spring-beans.xsd  
+            http://code.alibabatech.com/schema/dubbo  
+            http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+            http://www.springframework.org/schema/util
+            http://www.springframework.org/schema/util/spring-util.xsd">
+
+ 	<!-- 读取配置文件 -->
+	<util:properties id="app" location="classpath:app.properties"/>
+	
+	<bean id="zKSeqUtil" class="com.gomeo2o.utils.ZKSeqUtil">
+    	<constructor-arg index="0" value="#{app.dubboRegistry}"></constructor-arg>
+    </bean> 
+    
+    <bean id="springContextsUtil" class="com.gomeo2o.utils.SpringContextUtil"></bean>
+    
+	
+	<import resource="classpath:spring/venus-account-persistence-context.xml"/>
+	<import resource="classpath:spring/venus-account-service-context.xml"/>
+	<import resource="classpath:spring/venus-account-interceptor-context.xml"/>    
+	<import resource="classpath:spring/venus-account-dubbo-consumer.xml"/>
+    
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:application name="venus-account" />
+	<dubbo:registry id="central" address="#{app.dubboRegistry}" protocol="zookeeper"/>
+	
+	<dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.account_dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+		
+	<!-- 账户信息服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.AccountInfoFacade" ref="accountInfoFacade" version="1.3.3"/>
+	<!--提现流水服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.AdvanceDetailFacade" ref="advanceDetailFacade" version="1.3.3"/>
+	<!-- 预算明细服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.BudgetDetailFacade" ref="budgetDetailFacade" version="1.3.3"/>
+	<!-- 预算信息服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.BudgetInfoFacade" ref="budgetInfoFacade" version="1.3.3"/>
+	<!-- 预算总额额服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.BudgetTotalFacade" ref="budgetTotalFacade" version="1.3.3"/>
+	<!-- 优惠券明细服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.CouponDetailFacade" ref="couponDetailFacade" version="1.3.3"/>
+	<!-- 优惠券信息服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.CouponInfoFacade" ref="couponInfoFacade" version="1.3.3"/>
+	<!-- 返利明细服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.RebateDetailFacade" ref="rebateDetailFacade" version="1.3.3"/>
+	<!-- 积分明细服务接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.ScoreDetailFacade" ref="scoreDetailFacade" version="1.3.3"/>
+	
+	
+	<!-- 积分配置接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.ScoreConfigFacade" ref="scoreConfigFacade" version="1.3.3"/>
+	<!-- 积分信息接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.ScoreInfoFacade" ref="scoreInfoFacade" version="1.3.3"/>
+	<!-- 积分埋点接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.ScorePointFacade" ref="scorePointFacade" version="1.3.3"/>
+	<!-- 积分规则接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.ScoreRuleFacade" ref="scoreRuleFacade" version="1.3.3"/>
+
+	<!-- 账户绑定银行卡接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.BindingBankCardFacade" ref="bindingBankCardFacade" version="1.3.3"/>
+	<!-- 账户绑定银行卡接口 -->
+	<dubbo:service interface="com.gomeo2o.facade.account.service.SupportBankFacade" ref="supportBankFacade" version="1.3.3"/>
+	
+</beans>  

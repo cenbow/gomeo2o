@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+	<dubbo:reference registry="central" retries="0" interface="io.terminus.ecp.config.service.ConfigReadService" id="configReadService"/>
+	
+	<dubbo:application name="gomeo2o-account" />
+	
+	<dubbo:registry protocol="zookeeper" address="10.125.31.218:2181" />
+	<!-- <dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+
+	
+    <dubbo:protocol name="dubbo" port="30882" />
+	
+	
+	<!-- 积分埋点接口 -->
+	<dubbo:reference id="scorePointFacade" interface="com.gomeo2o.facade.account.service.ScorePointFacade" />
+	<!-- 积分规则接口 -->
+	<dubbo:reference id="scoreRuleFacade" interface="com.gomeo2o.facade.account.service.ScoreRuleFacade" />
+	<!-- 积分配置接口 -->
+	<dubbo:reference id="scoreConfigFacade" interface="com.gomeo2o.facade.account.service.ScoreConfigFacade" />
+	<!-- 积分信息接口 -->
+	<dubbo:reference id="scoreInfoFacade" interface="com.gomeo2o.facade.account.service.ScoreInfoFacade" />
+	<!-- 积分明细接口 -->
+	<dubbo:reference id="scoreDetailFacade" interface="com.gomeo2o.facade.account.service.ScoreDetailFacade" />
+	
+	<!-- 账户信息服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.AccountInfoFacade" id="accountInfoFacade" />
+	<!--提现流水服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.AdvanceDetailFacade" id="advanceDetailFacade" />
+	<!-- 预算明细服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.BudgetDetailFacade" id="budgetDetailFacade" />
+	<!-- 预算信息服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.BudgetInfoFacade" id="budgetInfoFacade" />
+	<!-- 预算总额额服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.BudgetTotalFacade" id="budgetTotalFacade" url="dubbo://10.144.48.93:30882"/>
+	<!-- 优惠券明细服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.CouponDetailFacade" id="couponDetailFacade" />
+	<!-- 优惠券信息服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.CouponInfoFacade" id="couponInfoFacade" />
+	<!-- 返利明细服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.RebateDetailFacade" id="rebateDetailFacade" />
+	
+	<!-- 绑定银行卡接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.BindingBankCardFacade" id="bindingBankCardFacade" />
+	<!-- 支持银行卡接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.SupportBankFacade" id="supportBankFacade" />
+	
+</beans> 

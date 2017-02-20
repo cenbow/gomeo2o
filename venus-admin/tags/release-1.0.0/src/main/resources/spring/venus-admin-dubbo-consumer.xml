@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2014 杭州端点网络科技有限公司
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+        
+    <dubbo:application name="#{app.appName}"/>
+    <dubbo:protocol name="dubbo" port="#{app.dubboPort}"/>
+    <dubbo:consumer timeout="#{app.dubboTimeout}"/>
+    <!-- registry address, used for service to register itself -->
+    <dubbo:registry id="central" address="#{app.dubboRegistry}" protocol="zookeeper"/>
+    
+    <!-- config services -->
+    <dubbo:reference interface="io.terminus.ecp.config.service.ConfigReadService" id="configReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.config.service.ConfigWriteService" id="configWriteService" retries="0" check="false"/>
+    
+    <dubbo:reference interface="cn.com.gome.configuration.service.GomeConfigReadService" id="gomeConfigReadService" retries="0" check="false"/>
+
+    <!-- msg service -->
+    <dubbo:reference interface="io.terminus.ecp.msg.service.NotifyReadService" id="notifyReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.msg.service.NotifyWriteService" id="notifyWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.msg.service.MsgReadService" id="msgReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.msg.service.MsgWriteService" id="msgWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.msg.sms.service.EnchancedSmsService" id="smsService" retries="0" check="false"/>
+
+    <!-- user services -->
+    <dubbo:reference interface="cn.com.gome.user.service.GomeUserReadService" id="gomeUserReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.user.service.GomeUserWriteService" id="gomeUserWriteService" retries="0" check="false"/>
+
+    <dubbo:reference interface="io.terminus.ecp.user.service.ResCtrlReadService" id="resCtrlReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.ResCtrlWriteService" id="resCtrlWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.SellerReadService" id="sellerReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.SellerWriteService" id="sellerWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.AgentReadService" id="agentReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.AddressReadService" id="addressReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.UserImageService" id="userImageService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.FeedbackReadService" id="feedbackReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.FeedbackWriteService" id="feedbackWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.SubDomainReadService" id="subDomainReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.SubDomainWriteService" id="subDomainWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.OperatorReadService" id="operatorReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.user.service.OperatorWriteService" id="operatorWriteService" retries="0" check="false"/>
+
+    <dubbo:reference interface="cn.com.gome.user.service.MemberTeamMembersFacade" id="memberTeamMembersFacade" retries="0" check="false"/>
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.AccountInfoFacade" id="accountInfoFacade" retries="0" check="false"/>
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.BindingBankCardFacade"  id="bindingBankCardFacade"  retries="0" check="false"/>
+    
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.CouponDetailFacade"  id="couponDetailFacade"  retries="0" check="false"/>
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.BudgetInfoFacade"  id="budgetInfoFacade"  retries="0" check="false"/>
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.AdvanceDetailFacade"  id="advanceDetailFacade"  retries="0" check="false"/>
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.BudgetDetailFacade"  id="budgetDetailFacade"  retries="0" check="false"/>
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.CouponInfoFacade"  id="couponInfoFacade"  retries="0" check="false"/>
+
+    <!-- item service -->
+    <dubbo:reference interface="io.terminus.ecp.category.service.BrandReadService" id="brandReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.category.service.BrandWriteService" id="brandWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.category.service.CategoryReadService" id="categoryReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.category.service.CategoryWriteService" id="categoryWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.item.service.GomeItemReadService" id="gomeItemReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.item.service.GomeItemWriteService" id="gomeItemWriteService" retries="0" check="false"/>
+
+    <dubbo:reference interface="cn.com.gome.item.service.RegionSkuReadService" id="regionSkuReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.item.service.RegionSkuWriteService" id="regionSkuWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.item.service.syn.ItemSynService" id="itemSynService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.item.service.temp.ItemTempService" id="findItemLevelThree" retries="0" check="false"/>
+	<dubbo:reference interface="cn.com.gome.item.service.QualificationService" id="qualificationService" retries="0" check="false" />
+
+    <!-- shop service -->
+    <dubbo:reference interface="io.terminus.ecp.shop.service.ShopReadService" id="shopReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.shop.service.ShopWriteService" id="shopWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.shop.service.ShopExtraReadService" id="shopExtraReadService" retries="0" check="false"/>
+
+    <!-- pay service -->
+    <dubbo:reference interface="io.terminus.ecp.pay.service.PayReadService" id="payReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.pay.service.PayWriteService" id="payWriteService" retries="0" check="false"/>
+
+    <!-- marketing service -->
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.assemble.ItemBundleService" id="itemBundleService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.assemble.SpuBundleService" id="spuBundleService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.coupon.CouponReadService" id="couponReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.coupon.CouponWriteService" id="couponWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.coupon.CouponStatisticsService" id="couponStatisticsService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.promo.PromoService" id="promoService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingActivityReadService" id="marketingActivityReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingActivityWriteService" id="marketingActivityWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingCalculateService" id="marketingCalculateService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingGiftService" id="marketingGiftService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingLogReadService" id="marketingLogReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingLogWriteService" id="marketingLogWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingToolReadService" id="marketingToolReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.marketing.service.MarketingToolWriteService" id="marketingToolWriteService" retries="0" check="false"/>
+
+    <dubbo:reference interface="cn.com.gome.marketing.service.ActivityWriteService" id="activityWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.marketing.service.ActivityReadService" id="activityReadService" retries="0" check="false"/>
+    <dubbo:reference registry="central" retries="0" interface="cn.com.gome.marketing.service.GomeCouponWriteService" id="gomeCouponWriteService" check="false"/>
+
+    <dubbo:reference interface="io.terminus.ecp.trade.service.statistics.StatisticsService" id="statisticsService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.OrderWriteService" id="orderWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.OrderRefundService" id="orderRefundService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.OrderPayReadService" id="orderPayReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.OrderPayWriteService" id="orderPayWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.ExpressReadService" id="expressReadService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.ExpressWriteService" id="expressWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.LogisticsInfoService" id="logisticsInfoService" retries="0" check="false"/>
+    <dubbo:reference interface="io.terminus.ecp.trade.service.TradeWriteService" id="tradeWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.trade.service.GomeOrderRefundWriteService" id="gomeOrderRefundWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.trade.service.GomeOrderRefundReadService" id="gomeOrderRefundReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.trade.service.GomeOrderWriteService" id="gomeOrderWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.trade.service.GomeOrderReadService" id="gomeOrderReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.trade.service.GomeTradeReadService" id="gomeTradeReadService" retries="0" check="false"/>
+	
+	<dubbo:reference interface="cn.com.gome.pay.service.payment.PaymentFacadeService" id="paymentFacadeService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.settlement.service.GomeSettlementReadService" id="gomeSettlementReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.settlement.service.GomeSettlementWriteService" id="gomeSettlementWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.fund.service.FundOperationReadService" id="fundOperationReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.fund.service.FundOperationWriteService" id="fundOperationWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.deposit.service.GomeDepositReadService" id="gomeDepositReadService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.deposit.service.GomeDepositWriteService" id="gomeDepositWriteService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.settlement.service.GomeSettlementJobService" id="gomeSettlementJobService" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.settlement.service.GomeSapJobService" id="gomeSapJobService" retries="0" check="false"/>
+
+
+    <!-- gome 会员 -->
+    <dubbo:reference interface="cn.com.gome.user.service.UserBaseInfoFacade" id="userBaseInfoFacade" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.user.service.MemberShopFavoriteFacade" id="memberShopFavoriteFacade" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.user.service.MemberGoodsFavoriteFacade" id="memberGoodsFavoriteFacade" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.user.service.MemberTeamFacade" id="memberTeamFacade" retries="0" check="false"/>
+    <!-- 行政区域 -->
+	<dubbo:reference interface="cn.com.gome.user.service.MemberProvinceFacade" id="memberProvinceFacade" retries="0" check="false" />	
+	<!-- 会员收获地址-->
+	<dubbo:reference interface="cn.com.gome.user.service.MemberAddressFacade" id="memberAddressFacade" retries="0" check="false" />	
+    
+    <!-- score service  -->
+    <dubbo:reference interface="com.gomeo2o.facade.account.service.ScoreDetailFacade" id="scoreDetailFacade"  retries="0" check="false" />
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.ScoreConfigFacade" id="scoreConfigFacade"  retries="0" check="false" />
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.ScorePointFacade" id="scorePointFacade"  retries="0" check="false" />
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.ScoreRuleFacade" id="scoreRuleFacade"  retries="0" check="false" />
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.RebateDetailFacade"  id="rebateDetailFacade"  retries="0" check="false" />
+	<!-- 预算总额额服务接口 -->
+	<dubbo:reference interface="com.gomeo2o.facade.account.service.BudgetTotalFacade"  id="budgetTotalFacade"  retries="0" check="false" />
+	
+	<!-- sns service  -->
+	<dubbo:reference interface="com.gomeo2o.facade.shb.service.ShbManagerFacade" id="shbManagerFacade"  retries="0" check="false" />
+	
+	<!-- vshop service  -->
+	<dubbo:reference interface="com.gomeo2o.facade.vshop.service.VshopFacade"  id="vshopFacade" retries="0" check="false" />
+ 	
+ 	<!-- IM service -->
+    <dubbo:reference interface="com.gomeo2o.facade.im.service.ImFacade"  id="imFacade"  retries="0" check="false"/> 
+    <dubbo:reference interface="com.gomeo2o.facade.im.service.MessageFacade" id="messageFacade" retries="0" check="false"/>
+    <dubbo:reference interface="com.gomeo2o.facade.im.service.AppVersionFacade" id="appVersionFacade" retries="0" check="false"/>
+    
+    <dubbo:reference interface="cn.com.gome.shop.service.XpopAccountFacade" id="xpopAccountFacade" check="false" retries="0" />
+    <dubbo:reference interface="cn.com.gome.shop.service.XpopExternalFacade" id="xpopExternalFacade" check="false" retries="0" />
+    <dubbo:reference interface="cn.com.gome.shop.service.XpopEnterSellerManageFacade" id="xpopEnterSellerManageFacade" check="false" retries="0" />
+    <dubbo:reference interface="cn.com.gome.shop.service.XpopShopCategoryManagerFacade" id="xpopShopCategoryManagerFacade" check="false" retries="0" />
+    <dubbo:reference interface="cn.com.gome.shop.service.XpopCommonPlatformFacade" id="xpopCommonPlatformFacade" check="false" retries="0" />
+    <dubbo:reference interface="cn.com.gome.trade.service.GomeOrderRecordsService" id="gomeOrderRecordsService" check="false" retries="0" />
+    <dubbo:reference interface="cn.com.gome.trade.service.GomeOrderProcessService" id="gomeOrderProcessService" check="false" retries="0" />
+    <dubbo:reference interface="io.terminus.ecp.item.service.ItemReadService" id="itemReadService" check="false" retries="0" />
+
+
+    <!-- 社交-群组 -->
+	<dubbo:reference interface="cn.com.mx.social.group.service.ISocialGroupFacade" id="socialGroupFacade" check="false" retries="0"/>
+	<!-- 社交-话题 -->
+	<dubbo:reference interface="cn.com.mx.social.topic.service.ISocialTopicFacade" id="socialTopicFacade" check="false" retries="0"/>
+	
+	<!-- statistics service -->
+    <dubbo:reference interface="cn.com.gome.stat.facade.service.OperateShopReportFacade"  id="operateShopReportFacade" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.stat.facade.service.OperateSalesReportFacade"  id="operateSalesReportFacade" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.stat.facade.service.OperateOrderReportFacade"  id="operateOrderReportFacade" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.gome.stat.facade.service.OperateShopSalesRebateFacade"  id="operateShopSalesRebateFacade" retries="0" check="false"/>
+    
+    <!-- 达人标签 -->
+    <dubbo:reference interface="cn.com.gome.user.service.ExpertLabelService"  id="expertLabelService" retries="0" check="false"/>
+    
+    <!-- 推荐位管理 -->
+	<dubbo:reference interface="cn.com.mx.cms.platform.service.ICMSPlatformManager"  id="cmsPlatformManager" retries="0" check="false"/>
+    <dubbo:reference interface="cn.com.mx.cms.platform.service.ICMSRecommendService"  id="cmsRecomendService"  retries="0" check="false"/>
+    
+    <!-- rebate注册中心地址-->
+    <dubbo:registry id="rebateService" protocol="zookeeper" address="#{app.rebateZk}" timeout="5000"/>
+    <!-- 返利模块相关接口 Start -->
+    <!-- 返利计划服务接口 -->
+    <dubbo:reference interface="cn.com.gome.rebate.dubbo.service.man.IDubboRebatePlanService" id="iDubboRebatePlanService" check="false" registry="rebateService"/>
+    <!-- 返利详情服务接口 -->
+    <dubbo:reference interface="cn.com.gome.rebate.dubbo.service.man.IDubboRebateDetailService" id="iDubboRebateDetailService" check="false" registry="rebateService"/>
+    <!--邀请商家入驻接口-->
+    <dubbo:reference interface="cn.com.gome.rebate.dubbo.service.man.IDubboRebateInviteeMerchant" id="iDubboRebateInviteeMerchant" check="false" registry="rebateService"/>
+    <dubbo:reference interface="cn.com.gome.rebate.dubbo.service.man.IDubboMerchantSettledService" id="iDubboMerchantSettledService" check="false" registry="rebateService"/>
+</beans>

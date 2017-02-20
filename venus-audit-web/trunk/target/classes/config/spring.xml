@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+           http://www.springframework.org/schema/aop   
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd  
+           http://www.springframework.org/schema/tx  
+           http://www.springframework.org/schema/tx/spring-tx-3.2.xsd  
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+	default-autowire="byName" default-lazy-init="false">
+
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:app.properties" />
+	<!-- 自动注入 -->
+	<context:component-scan base-package="cn.com.mx.**.service" />
+	<context:component-scan base-package="cn.com.mx.**.dao" />
+
+	<!-- redis计数用工具类 -->
+	<!-- <bean class="cn.com.mx.utils.factory.CountCache"/> -->
+	<import resource="spring-mvc.xml" />
+	<!-- dubbo服务配置 -->
+	<import resource="venus-audit-dubbo-consumer.xml" />
+	<!-- <import resource="dubbo-provider.xml"/> -->
+	<!-- 持久层配置 -->
+	<import resource="venus-audit-persistence-context.xml" />
+
+<!-- 	<aop:config> -->
+<!-- 		<aop:aspect id="LogAspect" ref="aspectBean" order="1"> -->
+<!-- 			配置service包下所有类或接口的所有方法 --> 
+<!-- 			<aop:pointcut id="businessService" -->
+<!-- 				expression="execution(* cn.com.mx.*.controller.*.*(..))" /> -->
+<!-- 			<aop:around pointcut-ref="businessService" method="doAround" /> -->
+<!-- 		</aop:aspect> -->
+<!-- 	</aop:config> -->
+
+<!-- 	<bean id="aspectBean" class="cn.com.mx.utils.LogsAspect"></bean> -->
+</beans>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.mx.cms.platform.dao.impl.RecommendDataDaoImpl">
+	<resultMap id="BaseResultMap" type="cn.com.mx.cms.entity.RecommendDataEntity">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="recommend_data" property="recommendData" jdbcType="VARCHAR" />
+		<result column="recommend_metadata_id" property="recommendMetadataId" jdbcType="BIGINT" />
+		<result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_operator" property="createOperator" jdbcType="VARCHAR" />
+		<result column="update_operator" property="updateOperator" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, recommend_data, recommend_metadata_id, is_delete,
+		create_time, update_time,
+		create_operator, update_operator
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from cms_recommend_data
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByRecommendType" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from cms_recommend_data
+		where recommend_metadata_id = #{type,jdbcType=BIGINT}
+		and is_delete = 0
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from cms_recommend_data
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insertSelective" parameterType="cn.com.mx.cms.entity.RecommendDataEntity">
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into cms_recommend_data
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="recommendData != null">
+				recommend_data,
+			</if>
+			<if test="recommendMetadataId != null">
+				recommend_metadata_id,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createOperator != null">
+				create_operator,
+			</if>
+			<if test="updateOperator != null">
+				update_operator,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="recommendData != null">
+				#{recommendData,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendMetadataId != null">
+				#{recommendMetadataId,jdbcType=BIGINT},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createOperator != null">
+				#{createOperator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateOperator != null">
+				#{updateOperator,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.com.mx.cms.entity.RecommendDataEntity">
+		update cms_recommend_data
+		<set>
+			<if test="recommendData != null">
+				recommend_data = #{recommendData,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendMetadataId != null">
+				recommend_metadata_id = #{recommendMetadataId,jdbcType=BIGINT},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createOperator != null">
+				create_operator = #{createOperator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateOperator != null">
+				update_operator = #{updateOperator,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.com.mx.cms.entity.RecommendDataEntity">
+		update cms_recommend_data
+		recommend_data = #{recommendData,jdbcType=VARCHAR},
+		recommend_metadata_id = #{recommendMetadataId,jdbcType=BIGINT},
+		is_delete = #{isDelete,jdbcType=TINYINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_operator = #{createOperator,jdbcType=VARCHAR},
+		update_operator = #{updateOperator,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 删除指定推荐位类型的库信息 -->
+	<delete id="deleteByType" parameterType="java.lang.Long">
+		delete from cms_recommend_data
+		where recommend_metadata_id = #{type,jdbcType=BIGINT}
+	</delete>
+</mapper>

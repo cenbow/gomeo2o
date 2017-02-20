@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.mx.chatRecord.dao.impl.chatRecordDaoImpl" >
+  <resultMap id="BaseResultMap" type="ChatRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="servicer_id" property="servicerId" jdbcType="VARCHAR" />
+    <result column="servicer_name" property="servicerName" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="VARCHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="message" property="message" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="BIT" />
+    <result column="message_type" property="messageType" jdbcType="BIT" />
+    <result column="is_delete" property="isDelete" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, servicer_id, servicer_name, customer_id, customer_name, message, send_time, type, 
+    message_type, is_delete, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from csh_chat_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from csh_chat_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="ChatRecord" >
+    insert into csh_chat_record (id, servicer_id, servicer_name, 
+      customer_id, customer_name, message, 
+      send_time, type, message_type, 
+      is_delete, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{servicerId,jdbcType=VARCHAR}, #{servicerName,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{type,jdbcType=BIT}, #{messageType,jdbcType=BIT}, 
+      #{isDelete,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="ChatRecord" >
+    insert into csh_chat_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="servicerId != null" >
+        servicer_id,
+      </if>
+      <if test="servicerName != null" >
+        servicer_name,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+      <if test="sendTime != null" >
+        send_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="messageType != null" >
+        message_type,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="servicerId != null" >
+        #{servicerId,jdbcType=VARCHAR},
+      </if>
+      <if test="servicerName != null" >
+        #{servicerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=BIT},
+      </if>
+      <if test="messageType != null" >
+        #{messageType,jdbcType=BIT},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="ChatRecord" >
+    update csh_chat_record
+    <set >
+      <if test="servicerId != null" >
+        servicer_id = #{servicerId,jdbcType=VARCHAR},
+      </if>
+      <if test="servicerName != null" >
+        servicer_name = #{servicerName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=BIT},
+      </if>
+      <if test="messageType != null" >
+        message_type = #{messageType,jdbcType=BIT},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="ChatRecord" >
+    update csh_chat_record
+    set servicer_id = #{servicerId,jdbcType=VARCHAR},
+      servicer_name = #{servicerName,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=BIT},
+      message_type = #{messageType,jdbcType=BIT},
+      is_delete = #{isDelete,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ venus-sns
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- 读取配置文件 -->
+	<util:properties id="app" location="classpath:app.properties"/>
+
+	<import resource="classpath:spring/venus-configuration-persistence-context.xml"/>
+	<import resource="classpath:spring/venus-configuration-service-context.xml"/>
+	<import resource="classpath:spring/venus-configuration-interceptor-context.xml"/>
+
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:application name="venus-configuration" />
+	<dubbo:registry id="central" address="#{app.dubboRegistry}" protocol="zookeeper"/>
+
+	<dubbo:protocol serialization="nativejava" name="dubbo" port="#{app.config_dubboPort}" threads="#{app.dubboThreads}"
+                    heartbeat="#{app.dubboHeartBeats}"/>
+
+    <dubbo:service version="1.3.0" registry="central" retries="0" interface="io.terminus.ecp.config.service.ConfigReadService" ref="zkConfigReadServiceImpl"/>
+    <dubbo:service version="1.3.0" registry="central" retries="0" interface="io.terminus.ecp.config.service.ConfigWriteService" ref="zkConfigWriteServiceImpl"/>
+    <dubbo:service version="1.3.0" registry="central" retries="0" interface="cn.com.gome.configuration.service.MqEventService" ref="mqEventServiceImpl"/>
+    <dubbo:service version="1.3.0" registry="central" retries="0" interface="cn.com.gome.configuration.service.GomeConfigReadService" ref="gomeConfigReadServiceImpl"/>
+
+</beans>

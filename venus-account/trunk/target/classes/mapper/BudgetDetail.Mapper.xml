@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.BudgetDetailDaoImpl">
+
+	<resultMap type="BudgetDetail" id="beanMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="detail_no" property="detailNo" javaType="String"/>
+		<result column="order_no" property="orderNo" javaType="String"/>
+		<result column="budget_no" property="budgetNo" javaType="String"/>
+		<result column="card_id" property="cardId" javaType="String"/>
+		<result column="budget_time" property="budgetTime" javaType="Date"/>
+		<result column="budget_type" property="budgetType" javaType="Integer"/>
+		<result column="record_value" property="recordValue" javaType="BigDecimal"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="state" property="state" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,order_no,card_id,budget_time,budget_type,
+		record_value,create_time,update_time,version,state,budget_no
+		from act_budget_detail
+		<where>
+			1=1
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="orderNo!=null and orderNo!=''">
+				and order_no = #{orderNo}
+			</if>
+		</where>
+	</select>
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,order_no,card_id,budget_time,budget_type,
+		record_value,create_time,update_time,version,state,budget_no
+		from act_budget_detail
+		<where>
+			1=1
+			<if test="budgetType != null and budgetType != ''">
+			 and budget_type = #{budgetType}
+			</if>
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+			<if test="cardId != null and cardId != ''">
+			 and card_id = #{cardId}
+			</if>
+			<if test="state != null and state != ''">
+			 and state = #{state}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="orderNo!=null and orderNo!=''">
+				and order_no = #{orderNo}
+			</if>
+		</where>
+		order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_budget_detail
+		<where>
+			1=1
+			<if test="budgetType != null and budgetType != ''">
+			 and budget_type = #{budgetType}
+			</if>
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="cardId != null and cardId != ''">
+			 and card_id = #{cardId}
+			</if>
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+			<if test="state != null and state != ''">
+			 and state = #{state}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="orderNo!=null and orderNo!=''">
+				and order_no = #{orderNo}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,user_id,account_total,score_ba,score_fr,rebate_ba,rebate_fr,
+		money_ba,money_fr,state, version	from act_budget_detail where id = #{id}
+  	</select>
+  	
+  	<insert id="addBudgetDetail" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_budget_detail(user_id,detail_no,order_no,card_id,budget_no,budget_time,budget_type,record_value,version,state)
+  		values(#{userId},#{detailNo},#{orderNo},#{cardId},#{budgetNo},#{budgetTime},#{budgetType},#{recordValue},0,#{state})
+  	</insert>
+  	
+  	
+  	
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.ScoreRuleDaoImpl">
+	<resultMap type="ScoreRule" id="beanMap">
+		<id column="id" property="id" />
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="rule_name" property="ruleName" javaType="String"/>
+		<result column="rule_state" property="ruleState" javaType="Integer"/>
+		<result column="record_time_str" property="recordTimeStr" javaType="Integer"/>
+		<result column="record_value" property="recordValue" javaType="String"/>
+		<result column="start_time" property="startTime" javaType="Date"/>
+		<result column="end_time" property="endTime" javaType="Date"/>
+		<result column="day_top" property="dayTop" javaType="Integer"/>
+		<result column="total_top" property="totalTop" javaType="Integer"/>
+		<result column="single_top" property="singleTop" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,rule_name,rule_state,record_value,record_time_str,
+		record_time,start_time,end_time,day_top,total_top,single_top,
+		update_time,create_time from  
+		act_score_rule order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,version,update_time,create_time,rule_name,rule_state,record_time_str,
+		record_value,start_time,end_time,day_top,total_top,single_top from act_score_rule 
+		<where>
+			1=1
+			<if test="id != null and id != ''">
+				and id = #{id} 
+			</if>
+		</where>
+	</select>
+	
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_score_rule
+	</select>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,rule_name,rule_state,record_value,record_time_str,record_time,
+    	start_time,end_time,day_top,total_top,single_top,update_time,create_time 
+    	from act_score_rule where id = #{id}
+  	</select>
+  	
+  	<update id="update" parameterType="ScoreRule">
+		update act_score_rule
+		<set>	
+			version = #{version}+1,
+		    rule_state = #{ruleState},
+		    record_value = #{recordValue},
+		    start_time = #{startTime},
+		    end_time = #{endTime},
+		    day_top = #{dayTop},
+		    total_top = #{totalTop},
+		    single_top = #{singleTop},
+		    rule_name = #{ruleName},
+		    record_time_str = #{recordTimeStr}
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<insert id="insert" parameterType="ScoreRule" keyProperty="id" useGeneratedKeys="true">
+		insert into act_score_rule(version,rule_name,rule_state,record_value,record_time_str,
+		start_time,end_time,day_top,total_top,single_top) values(0,#{ruleName},#{ruleState},
+		#{recordValue},#{recordTimeStr},#{startTime},#{endTime},#{dayTop},#{totalTop},#{singleTop});
+	</insert>
+	
+	
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~   ~ Copyright (c) 2014 杭州端点网络科技有限公司
+  ~
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       			http://www.springframework.org/schema/beans/spring-beans.xsd 
+       			http://www.springframework.org/schema/aop 
+       			http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+    
+   	<aop:config>
+        <aop:aspect id="LogAspect" ref="aspectBean">
+            <!--配置com.spring.service包下所有类或接口的所有方法-->
+            <aop:pointcut id="businessService" 
+            	expression="execution(* cn.com.gome.configuration.service.*.*(..)) 
+            	or  execution(* io.terminus.ecp.config.service.*.*(..)) " />
+            <aop:before pointcut-ref="businessService" method="doBefore"/>
+        </aop:aspect>
+    </aop:config>
+    
+    <bean id="aspectBean" class="com.gomeo2o.common.aspect.LogsAddSessionAspect"></bean>
+    
+
+</beans>

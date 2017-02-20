@@ -1,0 +1,1 @@
+ALTER TABLE `act_coupon_info` ADD COLUMN `detail_id`  bigint(20) NULL DEFAULT NULL COMMENT '红包对应流水主键id' AFTER `coupon_ecp_id`;

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.ScoreInfoDaoImpl">
+
+	<resultMap type="Map" id="beanMap">
+		<result column="score_total" property="scoreTotal" javaType="Integer"/>
+		<result column="score_utotal" property="scoreUtotal" javaType="Integer"/>
+		<result column="score_ftotal" property="scoreFtotal" javaType="Integer"/>
+	</resultMap>
+	
+	<resultMap type="ScoreInfo" id="ScoreInfoMap">
+		<id column="id" property="id" javaType="Long"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="count" property="count" javaType="Integer"/>
+		<result column="state" property="state" javaType="Integer"/>
+		<result column="deal_time" property="dealTime" javaType="Date"/>
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="total_count" property="totalCount" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="queryScoreInfoTotal" parameterType="ScoreInfo" resultMap="beanMap">
+		    select sum(s.total_count) as score_total,
+			sum(case s.state when 1 then s.count else 0 end) as score_utotal,
+			sum(case s.state when 0 then s.count else 0 end) as score_ftotal
+			from act_score_info s
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+				and s.user_id=#{userId}
+			</if>
+			<if test="siStartDealTime!=null and siStartDealTime!=''"> 
+				<![CDATA[and s.deal_time>=  DATE_FORMAT(#{siStartDealTime}, '%Y-%m-%d') ]]> 
+			</if> 
+			<if test="siEndDealTime!=null and siEndDealTime!=''"> 
+				<![CDATA[and s.deal_time<  DATE_FORMAT(#{siEndDealTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where> 
+	</select>
+	
+	<select id="queryScoreInfo" parameterType="ScoreInfo" resultMap="ScoreInfoMap">
+		select id,count,fr_count,deal_time,state,user_id,total_count from act_score_info s 
+		<where>
+			1=1
+			<if test="userId!=null and userId!=''">
+				and s.user_id=#{userId}
+			</if>
+		</where>
+	</select>
+	
+	<update id="update" parameterType="ScoreInfo">
+		update act_score_info
+		<set>	
+		    total_count = #{totalCount},
+		    count = #{count}
+		</set>
+		<where>
+			id = #{id} 
+		</where>
+	</update>
+	<update id="updateCount" parameterType="java.util.Map">
+		update act_score_info s
+		set s.count = (
+			case
+			when s.count - s.count/100*#{resetValue} <![CDATA[<]]> 0 then
+				0
+			else
+				s.count - s.count/100*#{resetValue}
+			end
+		)
+		where s.state=1
+	</update>
+</mapper>

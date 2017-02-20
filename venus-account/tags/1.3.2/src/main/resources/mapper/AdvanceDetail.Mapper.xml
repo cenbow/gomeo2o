@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.AdvanceDetailDaoImpl">
+
+	<resultMap type="AdvanceDetail" id="beanMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="detail_no" property="detailNo" javaType="String"/>
+		<result column="apply_time" property="applyTime" javaType="Date"/>
+		<result column="audit_time" property="auditTime" javaType="Date"/>
+		<result column="accept_time" property="acceptTime" javaType="Date"/>
+		<result column="success_time" property="successTime" javaType="Date"/>
+		<result column="cash_cardnumber" property="cashCardnumber" javaType="String"/>
+		<result column="bank_name" property="bankName" javaType="String"/>
+		<result column="advance_name" property="advanceName" javaType="String"/>
+		<result column="identity_num" property="identityNum" javaType="String"/>
+		<result column="advance_value" property="advanceValue" javaType="BigDecimal"/>
+		<result column="record_value" property="recordValue" javaType="BigDecimal"/>
+		<result column="cash_fee" property="cashFee" javaType="BigDecimal"/>
+		<result column="advance_remark" property="advanceRemark" javaType="String"/>
+		<result column="verify_type" property="verifyType" javaType="Integer"/>
+		<result column="payoff_no" property="payoffNo" javaType="String"/>
+		<result column="payoff_time" property="payoffTime" javaType="Date"/>
+		<result column="state" property="state" javaType="Integer"/>
+		<result column="creator" property="creator" javaType="String"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="user_op_no" property="userOpNo" javaType="String"/>
+	</resultMap>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,apply_time,audit_time,accept_time,success_time,cash_cardnumber,
+		bank_name,advance_name,identity_num,advance_value,record_value,cash_fee,advance_remark,verify_type,
+		payoff_no,payoff_time,state,creator,create_time,update_time,version
+		from act_advance_detail 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 	and user_id = #{userId}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 	and create_time = #{createTime}
+			</if>
+			<if test="payoff_no != null and payoff_no != ''">
+				and payoff_no = #{payoffNo}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+	</select>
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,apply_time,audit_time,accept_time,success_time,cash_cardnumber,
+		bank_name,advance_name,identity_num,advance_value,record_value,cash_fee,advance_remark,verify_type,
+		payoff_no,payoff_time,state,creator,create_time,update_time,version
+		from act_advance_detail  
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 and create_time = #{createTime}
+			</if>
+			<if test="payoffNo != null and payoffNo != ''">
+			and payoff_no = #{payoffNo}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+		order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_advance_detail  
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 and create_time = #{createTime}
+			</if>
+			<if test="payoffNo != null and payoffNo != ''">
+			and payoff_no = #{payoffNo}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+	</select>
+  	
+  	<update id="updateState" parameterType="Map">
+  		update act_advance_detail
+  		<set>
+  			state = #{state},
+  			success_time = #{successTime},
+  			record_value = #{recordValue},
+  		</set>
+  		<where>
+  			detail_no=#{detailNo}
+  		</where>
+  	</update>
+  	<update id="updateAdvanceDetailVoucher" parameterType="Map">
+  		update act_advance_detail
+  		<set>
+  			payoff_no = #{payoffNo},
+  			payoff_time = #{payoffTime},
+  			state = #{state}
+  		</set>
+  		<where>
+  			detail_no=#{detailNo}
+  		</where>
+  	</update>
+  	<insert id="addAdvanceDetail" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_advance_detail(user_id,detail_no,apply_time,audit_time,accept_time,success_time,cash_cardnumber,bank_name,advance_name,identity_num,
+			advance_value,record_value,cash_fee,advance_remark,verify_type,payoff_no,payoff_time,state,creator,version,user_op_no)
+		values(#{userId},#{detailNo},#{applyTime},#{auditTime},#{acceptTime},#{successTime},#{cashCardnumber},#{bankName},#{advanceName},#{identityNum},
+			#{advanceValue},#{recordValue},#{cashFee},#{advanceRemark},#{verifyType},#{payoffNo},#{payoffTime},#{state},#{creator},0,#{userOpNo})
+  	</insert>
+  	<select id="getById" parameterType="long" resultMap="beanMap">
+		select id,user_id,detail_no,apply_time,audit_time,accept_time,success_time,cash_cardnumber,
+		bank_name,advance_name,identity_num,advance_value,record_value,cash_fee,advance_remark,verify_type,
+		payoff_no,payoff_time,state,creator,create_time,update_time,version
+		from act_advance_detail  where id=#{id}
+	</select>
+	<select id="listAdvanceDetail" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,apply_time,audit_time,accept_time,success_time,cash_cardnumber,
+		bank_name,advance_name,identity_num,advance_value,record_value,cash_fee,advance_remark,verify_type,
+		payoff_no,payoff_time,state,creator,create_time,update_time,version
+		from act_advance_detail 
+		<where>
+			1=1
+			<if test="state != null and state != ''">
+				and state = #{state}
+			</if>
+		</where>
+	</select>
+	<select id="selectAdvanceDetail" parameterType="java.util.Map" resultMap="beanMap"> 
+		select id,user_id,detail_no,apply_time,audit_time,accept_time,success_time,cash_cardnumber,
+		bank_name,advance_name,identity_num,advance_value,record_value,cash_fee,advance_remark,verify_type,
+		payoff_no,payoff_time,state,creator,create_time,update_time,version
+		from act_advance_detail 
+		<where>
+			1=1
+			<if test="detailNo != null and detailNo != ''">
+				and detail_no = #{detailNo}
+			</if>
+		</where>
+	</select>
+  	
+  	
+  	
+</mapper>

@@ -1,0 +1,599 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.com.mx</groupId>
+		<artifactId>venus-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../../venus-parent</relativePath>
+	</parent>
+	<artifactId>venus-audit-web</artifactId>
+	<packaging>war</packaging>
+	<version>${venus-audit-web.version}</version>
+
+
+	<properties>
+		<venus-audit-web.version>0.0.1-SNAPSHOT</venus-audit-web.version>
+		<!-- mybatis分页插件 -->
+		<pagehelper.version>3.4.2</pagehelper.version>
+	</properties>
+
+	<dependencies>
+	<!-- 	<dependency>
+			<groupId>io.terminus</groupId>
+			<artifactId>terminus-common</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
+		
+		<!-- terminus session -->
+		<dependency>
+			<groupId>io.terminus.session</groupId>
+			<artifactId>terminus-session</artifactId>
+		</dependency>
+		
+		<!-- 调用msg begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-msg-api</artifactId>
+		</dependency>
+		<!-- 调用msg end -->
+		<!-- 调用plugin begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-plugin-api</artifactId>
+			<version>${venus-plugin-api.version}</version>
+		</dependency>
+		<!-- 调用plugin end -->
+		<!-- 调用image begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-image</artifactId>
+		</dependency>
+		<!-- 调用image end -->
+		<!-- 调用venus-cms服务 -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-cms-api</artifactId>
+		</dependency>
+		<!-- 调用venus-social服务 -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-social-api</artifactId>
+		</dependency>
+		<!-- 调用settlement服务 -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-settlement-api</artifactId>
+		</dependency>
+		<!-- 调用config服务 -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-configuration-api</artifactId>
+		</dependency>
+		<!-- 调用im服务 -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-im-api</artifactId>
+		</dependency>
+		<!-- 调用爱生活服务 -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-sns-api</artifactId>
+		</dependency>
+		<!-- 调用支付服务 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-pay-api</artifactId>
+		</dependency>
+		<!-- 调用支付服务 end -->
+		<!-- 调用销售分析服务 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-statistic-api</artifactId>
+		</dependency>
+		<!-- 调用销售分析服务 end -->
+
+		<!-- 调用微店服务 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-vshop-api</artifactId>
+		</dependency>
+		<!-- 调用微店服务 end -->
+		<!-- 调用会员接口服务 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-user-api</artifactId>
+		</dependency>
+		<!-- 调用会员接口服务 end -->
+		<!-- 调用账户接口服务 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-account-api</artifactId>
+		</dependency>
+		<!-- 调用商品接口服务 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-item-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+		</dependency>
+		<!-- 调用商品接口服务 end -->
+		<!-- 调用商品接口服务 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-trade-api</artifactId>
+		</dependency>
+		<!-- 调用商品接口服务 end -->
+		<!-- xpop商家 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-shop-api</artifactId>
+		</dependency>
+		<!-- xpop商家 end -->
+		<!-- 端点错误国际化 begin -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-web-common</artifactId>
+		</dependency>
+		<!-- 端点错误国际化 end -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+
+		
+		<dependency>  
+    		<groupId>org.codehaus.jackson</groupId>  
+    		<artifactId>jackson-core-lgpl</artifactId>  
+    		<version>1.9.6</version>  
+		</dependency>  
+		<dependency>  
+   	 		<groupId>org.codehaus.jackson</groupId>  
+    		<artifactId>jackson-core-asl</artifactId>  
+    		<version>1.9.4</version>  
+		</dependency>  
+		<dependency>  
+    		<groupId>org.codehaus.jackson</groupId>  
+    		<artifactId>jackson-mapper-asl</artifactId>  
+    		<version>1.9.5</version>  
+		</dependency>  
+		<dependency>  
+    		<groupId>org.codehaus.jackson</groupId>  
+    		<artifactId>jackson-mapper-lgpl</artifactId>  
+    		<version>1.9.5</version>  
+		</dependency>  
+		
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.16</version>
+		</dependency>
+		
+
+
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
+
+		<!-- dubbo 需要的jar start -->
+		<dependency>
+			<groupId>org.jboss.netty</groupId>
+			<artifactId>netty</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+		</dependency>
+
+<!-- 		<dependency>
+			<groupId>com.101tec</groupId>
+			<artifactId>zkclient</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency> -->
+			<!-- zk client -->
+			<dependency>
+				<groupId>com.github.sgroschupf</groupId>
+				<artifactId>zkclient</artifactId>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.zookeeper</groupId>
+						<artifactId>zookeeper</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>log4j</groupId>
+						<artifactId>log4j</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+		<!-- dubbo 需要的jar end -->
+
+		<!-- Gcache服务 -->
+		<dependency>
+			<groupId>com.gome.service</groupId>
+			<artifactId>cache-service</artifactId>
+		</dependency>
+		<!-- json工具类 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<classifier>jdk15</classifier>
+			<scope>compile</scope>
+		</dependency>
+		<!-- 返利依赖 -->
+		<!-- <dependency> <groupId>cn.com.gome.rebate</groupId> <artifactId>rebate-service</artifactId> 
+			</dependency> <dependency> <groupId>cn.com.gome.rebate</groupId> <artifactId>rebate-app-service</artifactId> 
+			<version>${rebate-app-service.version}</version> <exclusions> <exclusion> 
+			<groupId>log4j</groupId> <artifactId>log4j</artifactId> </exclusion> </exclusions> 
+			</dependency> -->
+		<!-- 调用lombok接口服务 begin -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<!-- 调用lombok接口服务 end -->
+		<!-- <dependency> <groupId>cn.com.gome</groupId> <artifactId>gome-common</artifactId> 
+			<version>${gome-common.version}</version> </dependency> -->
+
+		<!-- rocketMQ 需要的jar end -->
+		<dependency>
+			<groupId>com.alibaba.rocketmq</groupId>
+			<artifactId>rocketmq-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.rocketmq</groupId>
+			<artifactId>rocketmq-all</artifactId>
+			<type>pom</type>
+		</dependency>
+		<!-- rocketMQ 需要的jar end -->
+
+		<!--ftp down file -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+		</dependency>
+		<!--ftp down file -->
+		<!-- 缓存 -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.5.2</version>
+		</dependency>
+
+
+		<!-- solr -jar -->
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-solrj</artifactId>
+			<version>5.1.0</version>
+		</dependency>
+
+		<!-- redis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		<!-- pageHelper插件 -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>${pagehelper.version}</version>
+		</dependency>
+
+		<!-- Jetty -->
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>6.1.24</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-pool</groupId>
+			<artifactId>commons-pool</artifactId>
+		</dependency>
+
+	</dependencies>
+
+
+
+
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/webapp</directory>
+	            <filtering>true</filtering>
+	            <includes>
+	                <include>WEB-INF/web.xml</include>
+	            </includes>
+	            <targetPath>${project.build.directory}/${project.build.finalName}</targetPath>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- 增加编译代码的svn版本号 -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<webResources>
+						<webResource>
+							<directory>src/main/webapp/WEB-INF</directory>
+							<includes>
+								<include>web.xml</include>
+								<include>jetty-web.xml</include>
+							</includes>
+							<targetPath>WEB-INF</targetPath>
+							<filtering>true</filtering>
+						</webResource>
+					</webResources>
+					<archive>
+						<!-- 增加编译代码的svn版本号 -->
+						<manifestEntries>
+							<svn_version>${svn_version}</svn_version>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+
+				<configuration>
+					<testFailureIgnore>true</testFailureIgnore>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.2</version>
+				<configuration>
+					<docencoding>UTF-8</docencoding>
+					<encoding>UTF-8</encoding>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<uniqueVersion>false</uniqueVersion>
+				</configuration>
+			</plugin>
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>appassembler-maven-plugin</artifactId> 
+				<version>1.8.1</version> <configuration> <repositoryLayout>flat</repositoryLayout> 
+				<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath> 
+				<target>${project.build.directory}</target> <programs></programs> <daemons> 
+				<daemon> <id>venus-service</id> <mainClass>cn.gome.online.BootStrap</mainClass> 
+				<platforms> <platform>jsw</platform> </platforms> <generatorConfigurations> 
+				<generatorConfiguration> <generator>jsw</generator> <includes> <include>linux-x86-64</include> 
+				<include>macosx-universal-64</include> </includes> <configuration> <property> 
+				<name>venus.directory.in.classpath.first</name> <value>etc</value> </property> 
+				<property> <name>set.default.REPO_DIR</name> <value>lib</value> </property> 
+				<property> <name>wrapper.logfile</name> <value>logs/wrapper.log</value> </property> 
+				</configuration> </generatorConfiguration> </generatorConfigurations> <jvmSettings> 
+				<initialMemorySize>${initialMemorySize}</initialMemorySize> <maxMemorySize>${maxMemorySize}</maxMemorySize> 
+				<systemProperties> <systemProperty>${logRoot}</systemProperty> </systemProperties> 
+				<extraArguments> <extraArgument>-server</extraArgument> <extraArgument>-Dfile.encoding=utf-8</extraArgument> 
+				</extraArguments> </jvmSettings> </daemon> </daemons> </configuration> <executions> 
+				<execution> <id>generate-jsw-scripts</id> <phase>package</phase> <goals> 
+				<goal>generate-daemons</goal> </goals> </execution> </executions> </plugin> -->
+
+			<!-- jetty插件 -->
+			<!-- <plugin> <groupId>org.mortbay.jetty</groupId> <artifactId>jetty-maven-plugin</artifactId> 
+				<version>8.1.14.v20131031</version> <configuration> <contextXml>${project.basedir}/src/main/resources/jetty-context.xml</contextXml> 
+				<webApp> <contextPath>/</contextPath> </webApp> <war>${project.build.directory}/venus-web</war> 
+				</configuration> </plugin> -->
+			<!-- tomcat插件 -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>7.0.0.pre5</version>
+			</plugin>
+		</plugins>
+
+		<outputDirectory>target/classes</outputDirectory>
+		<testOutputDirectory>target/test-classes</testOutputDirectory>
+
+	</build>
+
+	<!-- 不同的打包环境 -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>../../venus-parent/trunk/resources/dev.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>../../venus-parent/trunk/resources/test.properties</filter>
+				</filters>
+			</build>
+		</profile>
+		<profile>
+			<id>pre</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>/gomeo2o/vprofiles/pre.properties</filter>
+				</filters>
+			</build>
+			<properties>
+				<venus-audit-web.version>1.0.0</venus-audit-web.version>
+			</properties>
+		</profile>
+		<profile>
+			<id>prd</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<filters>
+					<filter>/gomeo2o/vprofiles/venus/prd.properties</filter>
+				</filters>
+			</build>
+			<properties>
+				<venus-audit-web.version>1.0.0</venus-audit-web.version>
+			</properties>
+		</profile>
+	</profiles>
+
+
+</project>

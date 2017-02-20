@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2014 杭州端点网络科技有限公司
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="io.terminus.ecp.config.*">
+        <context:exclude-filter type="regex" expression="io.terminus.ecp.config.service.zk.*"/>
+        <context:exclude-filter type="regex" expression="io.terminus.ecp.config.center.*"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="center" class="io.terminus.ecp.config.center.ConfigCenter"/>
+
+    <beans profile="local" >
+        <bean id="readService" class="io.terminus.ecp.config.service.ConfigReadServiceImpl"/>
+        <bean id="writeService" class="io.terminus.ecp.config.service.ConfigWriteServiceImpl"/>
+    </beans>
+
+    <beans profile="dubbo">
+        <bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+            <constructor-arg index="0" value="#{app.zookeeperAddress}"/>
+        </bean>
+
+        <context:component-scan base-package="io.terminus.ecp.config.service.zk"/>
+        <context:component-scan base-package="io.terminus.ecp.config.event"/>
+    </beans>
+
+
+</beans>

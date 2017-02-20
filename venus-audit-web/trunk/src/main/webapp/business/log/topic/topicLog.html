@@ -1,0 +1,100 @@
+<!-- 制作人:袁长军  mx  -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>话题审核日志</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="../../../exa/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../exa/datatable/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../../../exa/bootstrap/css/base.css" rel="stylesheet">
+    <link href="../../../exa/dateDropper/css/datedropper.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <nav class="navbar navbar-default row no-yj  navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                         <button type="button" title="点击开启或者关闭导航"  class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-list-left" aria-expanded="false" style="display: block;">
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					      </button>
+                    <a class="navbar-brand" href="javaScript:;">国美+审核平台</a>
+                </div>
+                <div class="collapse navbar-collapse pull-right" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a class="dropdown-toggle" data-toggle="dropdown" href="#" style="height: 50px">
+                            <img class="img-circle pull-left img-responsive nav-user-img" src="/exa/bootstrap/img/user.jpg" /><span class="pull-left nav-username">管理员</span></a>
+
+                            <ul class="dropdown-menu dropdown-menu-right clearfix" style="padding-top: 0px;margin-right: 10px;">
+                                <li class="user-li-head">
+                                    <p class="text-center"><span>刘太明 - 网络工程师</span></p>
+                                    <p class="text-center"><span>刘太明 </span> </p>
+                                    <p class="text-center"><small><span>2015-04-23加入</span></small></p>
+                                </li>
+                                <li style="padding: 10px 20px; padding-bottom: 20px">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat no-yj">资料</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat no-yj">注销</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="row" style="margin-top:70px">
+        	<!-- 左侧树 勿动 如果想动 请找 bs-袁长军 -->
+            <div class="nav-left col-md-2 no-padding collapse in" id="nav-list-left" aria-expanded="true">
+                <div class="nav-list"><ul></ul></div>
+            </div>
+	
+       	 <div class="col-lg-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+					<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper form-inline" role="grid">
+					    <div class="input-group" style="margin-bottom: 3px;margin-top: 3px;">
+				         	<span class="input-group-addon">用户ID</span>
+				         	<input type="text" class="form-control" id="userId" placeholder="请输入用户ID">
+				        </div>
+					    <div class="input-group" style="margin-bottom: 3px;margin-top: 3px;">
+					        <button type="button" class="btn btn-primary" id="search">查询</button>
+				        </div>
+						<table class="table table-striped table-bordered table-hover dataTable" id="exaTopicLog">
+					          <thead>
+					          <tr>
+					              <th>话题ID</th>
+					              <th>创建时间</th>
+					              <th>话题名称</th>
+					              <th>话题内容</th>   
+					              <th>话题图片</th>     
+					              <th>创建用户ID</th>     
+					              <th>当前状态</th>     
+					              <th>审核时间</th>     
+					              <th>审核人</th>     
+					              <th>审核人操作</th>     
+					          </tr>
+					          </thead> 
+					          <tbody>
+					          </tbody>
+						</table>
+					</div>
+				  </div>
+              </div>
+          </div>
+       </div>
+    </div>
+    <script src="../../../exa/bootstrap/js/jquery.min.js" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../exa/bootstrap/js/publicData.js" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../exa/bootstrap/js/public.js" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../business/log/topic/js/topicLog.js" language="javascript" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../exa/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../../exa/datatable/jquery.dataTables.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="../../../exa/datatable/dataTables.bootstrap.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="../../../exa/dateDropper/js/datedropper.min.js" type="text/javascript" charset="UTF-8"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.ScoreDetailDaoImpl">
+
+	<resultMap type="ScoreDetail" id="beanMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="detail_no" property="detailNo" javaType="String"/>
+		<result column="order_no" property="orderNo" javaType="String"/>
+		<result column="product_id" property="productId" javaType="Long"/>
+		<result column="deal_time" property="dealTime" javaType="Date"/>
+		<result column="record_time" property="recordTime" javaType="Date"/>
+		<result column="deal_remark" property="dealRemark" javaType="String"/>
+		<result column="deal_type" property="dealType" javaType="Integer"/>
+		<result column="record_value" property="recordValue" javaType="Integer"/>
+		<result column="state" property="state" javaType="Integer"/>
+		<result column="creator" property="creator" javaType="String"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="point_id" property="pointId" javaType="Long"/>
+		<result column="rule_id" property="ruleId" javaType="Long"/>
+	</resultMap>
+	
+	<select id="selectUpdateScpreDetail" parameterType="java.util.Map" resultMap="beanMap">
+		select s.id,s.detail_no,s.deal_time,s.deal_type,s.record_value,s.user_id,s.rule_id,s.version
+		from act_score_detail s where s.state=0 and to_days(now()) = to_days(s.record_time) +1
+		order by s.record_time
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	
+	<select id="selectUpdateScpreDetailCount" resultType="long">
+		select count(0) from (
+			select s.id, s.deal_time,s.deal_type,s.record_value,s.user_id,s.rule_id,s.version
+			from act_score_detail s 
+			where s.state=0 and to_days(now()) = to_days(s.record_time) +1
+		order by s.record_time ) s
+	</select>
+	
+	<insert id="insert" parameterType="ScoreDetail" keyProperty="id" useGeneratedKeys="true">
+		insert into act_score_detail (user_id,detail_no,order_no,product_id,deal_time,record_time,deal_remark,deal_type,record_value,state,creator,version,point_id,rule_id) 
+		values (#{userId},#{detailNo},#{orderNo},#{productId},#{dealTime},#{recordTime},#{dealRemark},#{dealType},#{recordValue},0,#{creator},0,#{pointId},#{ruleId})
+	</insert>
+	<insert id="addScoreDetail" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+		insert into act_score_detail (user_id,detail_no,order_no,product_id,deal_time,record_time,deal_remark,deal_type,record_value,state,creator,version,point_id,rule_id) 
+		values (#{userId},#{detailNo},#{orderNo},#{productId},#{dealTime},#{recordTime},#{dealRemark},#{dealType},#{recordValue},0,#{creator},0,#{pointId},#{ruleId})
+	</insert>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,order_no,product_id,deal_time,record_time,deal_remark,
+		deal_type,record_value,state,creator,create_time,update_time,version
+		from act_score_detail 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 and create_time = #{createTime}
+			</if>
+		</where>
+	</select>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id, user_id,detail_no,order_no,product_id,deal_time,record_time,deal_remark,deal_type,
+		record_value,state,creator,version,point_id,rule_id,create_time,update_time
+		from act_score_detail
+		<where>
+			<if test="userId != null and userId != ''">
+				and user_id=#{userId}
+			</if>
+			<if test="state != null and state != ''">
+				and state=#{state}
+			</if>
+			<if test="dealType != null and dealType != ''">
+				and deal_type=#{dealType}
+			</if>
+			<if test="siStartDealTime!=null and siStartDealTime!=''"> 
+				<![CDATA[and record_time >=  DATE_FORMAT(#{siStartDealTime}, '%Y-%m-%d') ]]> 
+			</if> 
+			<if test="siEndDealTime!=null and siEndDealTime!=''"> 
+				<![CDATA[and record_time <  DATE_FORMAT(#{siEndDealTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+		order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_score_detail
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="state != null and state != ''">
+				and state=#{state}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 and create_time = #{createTime}
+			</if>
+			<if test="dealType != null and dealType != ''">
+				and deal_type=#{dealType}
+			</if>
+			<if test="siStartDealTime!=null and siStartDealTime!=''"> 
+				<![CDATA[and record_time >=  DATE_FORMAT(#{siStartDealTime}, '%Y-%m-%d') ]]> 
+			</if> 
+			<if test="siEndDealTime!=null and siEndDealTime!=''"> 
+				<![CDATA[and record_time <  DATE_FORMAT(#{siEndDealTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryScoreTotal"  parameterType="java.util.Map" resultType="long" >
+		select sum(record_value) from act_score_detail
+		<where>
+			1=1
+			<if test="state != null and state != ''">
+					and state=#{state}
+			</if>
+		</where>
+	</select>
+	
+	<update id="update" parameterType="ScoreDetail">
+		update act_score_detail
+		<set>
+			state = #{state}
+		</set>
+		<where>
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="detailNo != null and detailNo != ''">
+			 and detail_no = #{detailNo}
+			</if>
+		</where>
+	</update>
+	
+	
+</mapper>

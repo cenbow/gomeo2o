@@ -1,0 +1,7 @@
+/login                    :post,get
+/api/user/login           :post
+/api/user/signup          :post
+/api/user/forgot-password :post
+/api/user/sms             :get
+/api/user/verify          :get
+/api/admin/sap/sap_notice :post

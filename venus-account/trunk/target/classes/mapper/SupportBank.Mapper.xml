@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.SupportBankDaoImpl">
+
+    <resultMap type="SupportBank" id="beanMap">
+		<id column="id" property="id" />
+		<result column="bank_no" property="bankNo" javaType="String"/>
+		<result column="bank_name" property="bankName" javaType="String"/>
+		<result column="bank_logo" property="bankLogo" javaType="String"/>
+		<result column="card_type" property="cardType" javaType="Integer"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+	</resultMap>
+	
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,bank_no,bank_name,bank_logo,card_type,version
+		from act_support_bank 
+		<where>
+			1=1
+			<if test="id != null and id != ''">
+			 and id = #{id}
+			</if>
+		</where>
+	</select>
+
+  
+</mapper>

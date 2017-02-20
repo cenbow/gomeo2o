@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+	<!-- 读取配置文件 -->
+	<util:properties id="app" location="http://cfg-bs.dev.gomeplus.com/property/app.properties" />
+	<dubbo:application name="venus-cms" />
+	<!-- <dubbo:consumer timeout="#{app.dubboTimeout}"/> -->
+	<dubbo:registry id="centralConsumer" address="#{app.dubboRegistry}"
+		protocol="zookeeper" />
+	<dubbo:registry id="rebateZk" address="#{app.rebateZk}"
+		protocol="zookeeper" />
+	<!-- Gcache注册中心地址 -->
+	<dubbo:registry id="gCacheService" protocol="zookeeper"
+		address="#{app.gcache_registry_address}" />
+		
+	<!-- 读取ecp-configs配置 -->
+	<dubbo:reference registry="centralConsumer" retries="0"
+		interface="io.terminus.ecp.config.service.ConfigReadService" id="configReadService" />
+	<dubbo:reference registry="centralConsumer" retries="0"
+		interface="io.terminus.ecp.config.service.ConfigWriteService" id="configWriteService" />
+	<!-- 配置变化动态更新zookeeper -->
+	<bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+		<constructor-arg index="0" value="#{app.zookeeperAddress}" />
+	</bean>
+
+	<!-- 商品信息 -->
+	<dubbo:reference interface="io.terminus.ecp.item.service.ItemReadService"
+		id="itemReadService" check="false" registry="centralConsumer" />
+	<dubbo:reference interface="cn.com.gome.item.service.GomeItemReadService"
+		id="gomeItemReadService" check="false" registry="centralConsumer"/>
+		
+	<!-- 社交-群组 -->
+	<dubbo:reference interface="cn.com.mx.social.group.service.ISocialGroupFacade"
+		id="socialGroupFacade" check="false" registry="centralConsumer" />
+	<!-- 社交-话题 -->
+	<dubbo:reference interface="cn.com.mx.social.topic.service.ISocialTopicFacade"
+		id="socialTopicFacade" check="false" registry="centralConsumer" />
+	<!-- 会员产品收藏 -->
+	<dubbo:reference interface="cn.com.gome.user.service.MemberGoodsFavoriteFacade"
+		id="memberGoodsFavoriteFacade" check="false" registry="centralConsumer" />
+	<!-- 达人 -->
+	<dubbo:reference interface="com.gomeo2o.facade.shb.service.ShbManagerFacade"
+		id="shbManagerFacade" check="false" registry="centralConsumer" />
+	<!-- 微店相关接口 start -->
+	<dubbo:reference interface="com.gomeo2o.facade.vshop.service.VshopFacade"
+		id="vshopFacade" check="false" registry="centralConsumer" />
+	<!-- 会员店铺收藏 -->
+	<dubbo:reference interface="cn.com.gome.user.service.MemberShopFavoriteFacade"
+		id="memberShopFavoriteFacade" check="false" registry="centralConsumer" />
+	<!-- 爱生活相关接口 start -->
+	<dubbo:reference interface="com.gomeo2o.facade.shb.service.ShbInfoFacade"
+		id="shbInfoFacade" check="false" registry="centralConsumer" />
+	<!-- 会员相关接口  -->
+	<dubbo:reference interface="cn.com.gome.user.service.UserBaseInfoFacade"
+		id="userBaseInfoFacade" check="false" registry="centralConsumer"/>
+	<!-- 返利相关接口 -->
+	<dubbo:reference
+		interface="cn.com.gome.rebate.dubbo.service.man.IDubboRebatePlanService"
+		id="dubboRebatePlanServiceImpl" check="false" registry="rebateZk" />
+	<!-- 红包信息 -->
+	<dubbo:reference
+		interface="io.terminus.ecp.marketing.service.coupon.CouponReadService"
+		id="couponReadService" check="false" registry="centralConsumer" />
+
+	<!-- im相关接口 start -->
+	<dubbo:reference interface="com.gomeo2o.facade.im.service.ImFacade"
+		id="imFacade" check="false" registry="centralConsumer" />
+	<!-- Gcache缓存使用 -->
+	<dubbo:reference interface="com.gome.service.CacheService"
+		id="cacheService" loadbalance="random" timeout="5000" check="false"
+		registry="gCacheService" />
+	<dubbo:reference
+		interface="io.terminus.ecp.marketing.service.relations.ItemActivityReadService"
+		id="itemActivityReadService" check="false" registry="centralConsumer"/>
+		
+
+</beans>

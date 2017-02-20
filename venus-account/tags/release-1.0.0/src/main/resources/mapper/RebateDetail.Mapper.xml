@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.RebateDetailDaoImpl">
+	<resultMap type="RebateDetail" id="beanMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="detail_no" property="detailNo" javaType="String"/>
+		<result column="order_no" property="orderNo" javaType="String"/>
+		<result column="deal_time" property="dealTime" javaType="Date"/>
+		<result column="expect_time" property="expectTime" javaType="Date"/>
+		<result column="record_time" property="recordTime" javaType="Date"/>
+		<result column="merchant_rebate" property="merchantRebate" javaType="BigDecimal"/>
+		<result column="platform_rebate" property="platformRebate" javaType="BigDecimal"/>
+		<result column="record_value" property="recordValue" javaType="BigDecimal"/>
+		<result column="record_rule" property="recordRule" javaType="Integer"/>
+		<result column="deal_remark" property="dealRemark" javaType="String"/>
+		<result column="deal_type" property="dealType" javaType="Integer"/>
+  		<result column="state" property="state" javaType="Integer"/>
+  		<result column="creator" property="creator" javaType="String"/>
+  		<result column="product_id" property="productId" javaType="Long"/>
+  		<result column="shop_id" property="shopId" javaType="Long"/>
+  		<result column="rebate_state" property="rebateState" javaType="Integer"/>
+  		<result column="create_time" property="createTime" javaType="Date"/>
+  		<result column="update_time" property="updateTime" javaType="Date"/>
+  		<result column="version" property="version" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,order_no,deal_time,expect_time,record_time,merchant_rebate,
+		platform_rebate,record_value,record_rule,deal_remark,deal_type,state,creator,create_time,
+		update_time,version,product_id,shop_id,rebate_state
+		from act_rebate_detail
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+				and user_id=#{userId}
+			</if>
+			<if test="orderNo != null and orderNo != ''">
+				and order_no=#{orderNo}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="dealType!=null and dealType!=''">
+				and deal_type=#{dealType}
+			</if>
+		</where>
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	<select id="selectRebateOne" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,detail_no,order_no,deal_time,expect_time,record_time,merchant_rebate,
+		platform_rebate,record_value,record_rule,deal_remark,deal_type,state,creator,create_time,
+		update_time,version,product_id,shop_id,rebate_state
+		from act_rebate_detail
+		<where>
+			<if test="userId != null and userId != ''">
+				and user_id=#{userId}
+			</if>
+			<if test="orderNo != null and orderNo != ''">
+				and order_no=#{orderNo}
+			</if>
+			<if test="dealType!=null and dealType!=''">
+				and deal_type=#{dealType}
+			</if>
+			<if test="recordValue!=null and recordValue!=''">
+				and record_value=#{recordValue}
+			</if>
+			<if test="state!=null and state!=''">
+				and state=#{state}
+			</if>
+			<if test="shopId!=null and shopId!=''">
+				and shop_id=#{shopId}
+			</if>
+			<if test="productId!=null and productId!=''">
+				and product_id=#{productId}
+			</if>
+		</where>
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(id) from act_rebate_detail
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+				and user_id=#{userId}
+			</if>
+			<if test="orderNo != null and orderNo != ''">
+				and order_no=#{orderNo}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="dealType!=null and dealType!=''">
+				and deal_type=#{dealType}
+			</if>
+		</where>
+	</select>
+	<select id="getById" parameterType="long" resultMap="beanMap">
+		select id,user_id,detail_no,order_no,deal_time,expect_time,record_time,merchant_rebate,
+		platform_rebate,record_value,record_rule,deal_remark,deal_type,state,creator,create_time,
+		update_time,version,product_id,shop_id,rebate_state
+		from act_rebate_detail where id=#{id}
+	</select>
+	
+	<insert id="addRebateDetail" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+		insert into act_rebate_detail (user_id,detail_no,order_no,deal_time,expect_time,record_time,merchant_rebate,
+		platform_rebate,record_value,record_rule,deal_remark,deal_type,state,creator,product_id,shop_id,rebate_state,version) 
+		values (#{userId},#{detailNo},#{orderNo},#{dealTime},#{expectTime},#{recordTime},#{merchantRebate},
+		#{platformRebate},#{recordValue},#{recordRule},#{dealRemark},#{dealType},#{state},#{creator},#{productId},#{shopId},#{rebateState},0)
+	</insert>
+	<update id="updateRebateDetailState" parameterType="Map">
+		update act_rebate_detail
+		<set>	
+		   	state = #{state},
+			version = #{version}+1
+		</set>
+		<where>
+			id = #{id} and version = #{version} and detail_no= #{detailNo}
+		</where>
+	</update>
+	
+</mapper>

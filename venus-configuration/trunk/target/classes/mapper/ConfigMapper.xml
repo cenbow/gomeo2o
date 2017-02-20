@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014 杭州端点网络科技有限公司
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="Config">
+    <resultMap id="ConfigMap" type="Config">
+        <id column="id" property="id"/>
+        <result column="key" property="key"/>
+        <result column="value" property="value"/>
+        <result column="description" property="description"/>
+        <result column="scope" property="scope"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <sql id="tb">
+        ecp_configs
+    </sql>
+
+    <sql id="cols_all">
+        id,
+        <include refid="cols_exclude_id"/>
+    </sql>
+
+    <sql id="cols_exclude_id">
+      `key`, `value`, description,scope,created_at, updated_at
+    </sql>
+
+    <sql id="vals">
+        #{key}, #{value},#{description},#{scope}, now(), now()
+    </sql>
+
+    <insert id="create" parameterType="Config" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO
+        <include refid="tb"/>
+        (<include refid="cols_exclude_id"/>)
+        VALUES
+        (<include refid="vals"/>)
+    </insert>
+
+
+    <update id="update" parameterType="Config">
+        UPDATE
+        <include refid="tb"/>
+        <set>
+            <if test="key != null">
+                `key` = #{key},
+            </if>
+            <if test="value != null">
+                `value` = #{value},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="scope != null">
+                scope = #{scope},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM  <include refid="tb"/> WHERE id = #{id}
+    </delete>
+
+
+    <select id="findByKey" parameterType="string" resultMap="ConfigMap">
+        SELECT
+        <include refid="cols_all"/>
+        FROM
+        <include refid="tb"/>
+        WHERE `key` = #{key}
+        LIMIT 1
+    </select>
+
+
+    <select id="find" parameterType="long" resultMap="ConfigMap">
+        SELECT
+        <include refid="cols_all"/>
+        FROM
+        <include refid="tb"/>
+        WHERE `id` = #{id}
+        LIMIT 1
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(1)
+        FROM
+        <include refid="tb"/>
+    </select>
+
+    <select id="searchByKey" parameterType="string" resultMap="ConfigMap">
+        SELECT
+        <include refid="cols_all"/>
+        FROM
+        <include refid="tb"/>
+        WHERE `key` LIKE #{key}
+    </select>
+
+    <select id="paging" parameterType="map" resultMap="ConfigMap">
+        SELECT
+        <include refid="cols_all"/>
+        FROM
+        <include refid="tb"/>
+        LIMIT #{offset}, #{limit}
+    </select>
+
+
+    <select id="list" parameterType="list" resultMap="ConfigMap">
+        SELECT
+        <include refid="cols_all"/>
+        FROM
+        <include refid="tb"/>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="venus-audit-web">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="venus-msg-api-1.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-msg-api/venus-msg-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="venus-plugin-api-1.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-plugin-api/venus-plugin-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="venus-image-1.2.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-image/venus-image">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="venus-cms-api-1.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-cms-api/venus-cms-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="venus-social-api-1.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-social-api/venus-social-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="venus-sns-api-1.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-sns-api/venus-sns-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="venus-pay-api-1.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-pay-api/venus-pay-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="venus-statistic-api-1.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/venus-statistic-api/venus-statistic-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="venus-audit-web"/>
+        <property name="java-output-path" value="/venus-audit-web/target/classes"/>
+    </wb-module>
+</project-modules>

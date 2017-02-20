@@ -1,0 +1,468 @@
+
+<html>
+<head>
+    <title>接口测试</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<link rel="stylesheet" type="text/css" href="resource/js/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="resource/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="resource/js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="resource/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="resource/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="resource/js/commontool.js"></script>
+</head>
+<body>
+	<div class="easyui-layout" style="width:100%;height:100%;">
+		<div data-options="region:'north'" style="font-size:25px;height:40px;padding:5px 0 0 5px">
+			<span style="font:20"><strong>APP端接口检测</strong></span>
+		</div>
+		<div data-options="region:'west',split:true" title="接口列表" style="width:200px;">
+			<div id="tree"></div>
+		</div>
+		<div id="mainDiv" data-options="region:'center',title:'接口操作'">			
+			<div   style="font-size:18px;margin:10px 0 10px 10px">
+				<span id="apiInfoDiv"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="float:right;margin-right: 30px;" id="returnDataType"></span>
+			</div>
+			<form id="subForm" name="form1" target="iframe1">
+				<div id="paramsDiv" style="font-size:18px;margin:10px 0 10px 10px">
+					
+				</div>
+				<div style="display:none">
+					<input id="userId" name="userId" value="0" />
+					<input id="clientOs" name="clientOs" value="1" />
+					<input id="clientOsVersion" name="clientOsVersion" value="4.3" />
+					<input id="appType" name="appType" value="1" />
+					<input id="appVersion" name="appVersion" value="1.0" />
+					<input id="phoneType" name="phoneType" value="三星GALAXY Note4" />
+					<input id="ip" name="ip" value="192.12.33.22" />
+					<input id="mac" name="mac" value="ac as 23 3d" />
+					<input id="netType" name="netType" value="4G" />
+					<input id="devId" name="devId" value="IPhone1234567890" />
+					<input id="otherDevInfo" name="otherDevInfo" value="someInfo" />
+					<input id="loginToken" name="loginToken" value="" />
+					<input id="pubPlat" name="pubPlat" value="" />
+					
+					<input id="pageNum" name="pageNum" value="1" />
+					<input id="numPerPage" name="numPerPage" value="10" />
+					<input id="lastRecordId" name="lastRecordId" value="1000001" />
+					
+					<!-- <input id="id" name="id" value="1" />
+					<input id="shopName" name="shopName" value="店铺" />
+					<input id="shopImg" name="shopImg" value="1000001jpg" />
+					<input id="userName" name="userName" value="" />
+					<input id="address" name="address" value="地址" /> -->
+					<!-- <input id="longitude" name="longitude" value="100" />
+					<input id="latitude" name="latitude" value="2000" /> -->
+				</div>
+			</form>
+			<select id="reqType" >
+				<option value="get">get</option>
+				<option value="post">post</option>
+				<option value="delete">delete</option>
+				<option value="put">put</option>
+			</select>
+			<div id="submitDiv" style='display:none' style="padding:0 0 0 10px">
+				&nbsp;&nbsp;<a href="#"  class='easyui-linkbutton' onclick="sendUrl()"  data-options='iconCls:"icon-ok"'>提交&nbsp;&nbsp;</a>
+				<span style="float:right;padding:0 20px 0 0" id="publicParams" ><a  href="#"  class='easyui-linkbutton' onclick="showPublicParams()" >公共参数</a></span>
+				<span style="display:none;float:right;padding:0 20px 0 0" id="pageParams" ><a  href="#"  class='easyui-linkbutton' onclick="showPageParams()" >分页参数</a></span>
+				<span style="display:none;float:right;padding:0 20px 0 0" id="tinyParams" ><a  href="#"  class='easyui-linkbutton' onclick="showTinyParams()" >申请开店参数</a></span>
+			</div>
+			<hr>
+			<div style="margin:10px 0 10px 10px">
+				<textarea id="showResult" rows="15" cols="120"></textarea>	
+			</div>			
+		</div>
+		<div data-options="region:'south',split:true" style="height:30px;padding:5px 0 0 5px">
+			<font color="green">验证返回json数据地址：</font><a href="http://www.bejson.com" target="_blank">http://www.bejson.com</a>
+			<font color="green">验证返回json数据地址：</font><a href="http://json.cn" target="_blank">http://json.cn</a>
+			<span></span>
+		</div>
+	</div>
+	<iframe id="iframe1" name="iframe1" width="0" height="0" onload="onIFrameLoaded(this);"></iframe>
+			<div style="display:none">
+					<div id="PublicParams" style="padding:20px 0 0 0">
+						<table>
+							<tr>
+								<td align="right">用户ID(userId)：</td>
+								<td><input id="userId2" name="userId" value="0" /></td>
+							</tr>
+							<tr>
+								<td align="right">登陆token信息：</td>
+								<td><input id="loginToken2" name="loginToken2" value="" /></td>
+							</tr>
+							<tr>
+								<td align="right">客户端操作系统(clientOs)：</td>
+								<td><input id="clientOs2" name="clientOs" value="1" /></td>
+							</tr>
+							<tr>
+								<td align="right">客户端操作系统版本(clientOsVersion)：</td>
+								<td><input id="clientOsVersion2" name="clientOsVersion" value="4.3" /></td>
+							</tr>
+							<tr>
+								<td align="right">APP类型(appType)：</td>
+								<td><input id="appType2" name="appType" value="1" /></td>
+							</tr>
+							<tr>
+								<td align="right">APP版本(appVersion)：</td>
+								<td><input id="appVersion2" name="appVersion" value="1.0" /></td>
+							</tr>
+							
+							<tr>
+								<td align="right">手机型号(phoneType)：</td>
+								<td><input id="phoneType2" name="phoneType" value="三星GALAXY Note4" /></td>
+							</tr>
+							<tr>
+								<td align="right">IP地址(ip)：</td>
+								<td><input id="ip2" name="ip" value="192.12.33.22" /></td>
+							</tr>
+							<tr>
+								<td align="right">MAC地址(mac)：</td>
+								<td><input id="mac2" name="mac" value="ac as 23 3d" /></td>
+							</tr>
+							<tr>
+								<td align="right">网络类型(netType)：</td>
+								<td><input id="netType2" name="netType" value="4G" /></td>
+							</tr>
+							<tr>
+								<td align="right">设备号(devId)：</td>
+								<td><input id="devId2" name="devId" value="IPhone123456789" /></td>
+							</tr>
+							<tr>
+								<td align="right">其他设备硬件信息(otherDevInfo)：</td>
+								<td><input id="otherDevInfo2" name="otherDevInfo" value="someInfo" /></td>
+							</tr>
+							<tr>
+								<td align="right">统计(pubPlat)：</td>
+								<td><input id="pubPlat2" name="pubPlat" value="" /></td>
+							</tr>
+						</table>
+					</div>
+					<div id="PageParams">
+						<table>
+							<tr>
+								<td align="right">第几页(pageNum)：</td>
+								<td><input id="pageNum2" name="pageNum2" value="1" /></td>
+							</tr>
+							<tr>
+								<td align="right">每页条数(numPerPage)：</td>
+								<td><input id="numPerPage2" name="numPerPage2" value="10" /></td>
+							</tr>
+							<tr>
+								<td align="right">上一页最后一个ID(lastRecordId)：</td>
+								<td><input id="lastRecordId2" name="lastRecordId2" value="1000001" /></td>
+							</tr>
+						</table>
+					</div>
+					<div id="TinyParams">
+						<table>
+							<tr>
+								<td align="right">用户ID(id)：</td>
+								<td><input id="tinyId" name="tinyId" value="1" /></td>
+							</tr>
+							<tr>
+								<td align="right">店铺名称(shopName)：</td>
+								<td><input id="shopName1" name="shopName1" value="店铺" /></td>
+							</tr>
+							<tr>
+								<td align="right">店铺图片(shopImg)：</td>
+								<td><input id="shopImg1" name="shopImg1" value="1000001jpg" /></td>
+							</tr>
+							<tr>
+								<td align="right">用户名称(userName)：</td>
+								<td><input id="userName1" name="userName1" value="用户" /></td>
+							</tr>
+							<tr>
+								<td align="right">详细地址(address)：</td>
+								<td><input id="address1" name="address1" value="地址" /></td>
+							</tr>
+							<tr>
+								<td align="right">经度(longitude)：</td>
+								<td><input id="longitude1" name="longitude1" value="100" /></td>
+							</tr>
+							<tr>
+								<td align="right">纬度(latitude)：</td>
+								<td><input id="latitude1" name="latitude1" value="2000" /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+</body>
+<script>
+	$('#showResult').html("");
+	var treeData=[              
+	              {
+//我的*****************************************************************
+	            	  'id':4,'text':'我的',"state": "closed", 
+	            	  "returnType":"false",'url':'','params':'',
+	            	  'children':[    
+	            	              	  {
+	            	              			'id':4,'text':'我的个人信息',"state": "closed", 
+							            	 "returnType":"false",'url':'','params':'',
+							            	 'children':[														
+							            	              
+							            	              {
+							            	            	  'id':43,'text':'登录',"state": "closed",
+							            	            	  "returnType":"false",'url':'','params':'', 
+						            	            		  'children':[
+																			
+						            		            	              {
+												            	            	  'id':431,'text':'99_登录 ',
+												            	            	  "returnType":"false",'url':'user/login','params':'loginName,password,verifyCode' 
+											            	              }
+						            		            	  ]
+							            	              }
+							            	             
+	            	              			  ]
+	            	              	  }
+	            	  	]
+	              }
+	            
+				 ];
+	$('#tree').tree({
+			data:treeData,
+			closed: true,
+			collapsible: false, 
+			
+			onClick: function(node){
+				$('#mainDiv').title=node.text;
+				$('#apiInfoDiv').html(node.text+":"+node.url);  
+				//如果有地址就列出地址和参数
+				if(node.url!=''){
+					var params=node.params.split(',');
+					var paramsHtml="参数：";
+					if(params!=''){//如果参数不会空，则列出参数
+						
+						var hasPageParams=false;//判断是否有分页参数
+						var hasTinyParams=false;//判断是否有申请微店参数
+						for(var i=0;i<params.length;i++){
+							if(params[i]=="pageParams"){
+								hasPageParams=true;
+								continue;
+							}
+							if(params[i]=="tinyParams"){
+								hasTinyParams=true;
+								continue;
+							}
+							if(params[i].indexOf("file:")> -1) {
+								var imgName = params[i].replace("file:","");
+								paramsHtml+="<p/>" + imgName+":<input name='"+imgName+"' type='file' size='10' />&nbsp;&nbsp;&nbsp;&nbsp;";
+								document.getElementById('subForm').method="post";
+								document.getElementById('subForm').enctype="multipart/form-data";
+								continue;
+							}	
+							paramsHtml+=params[i]+":<input name='"+params[i]+"' size='10' value='1'/>&nbsp;&nbsp;&nbsp;&nbsp;";
+							if(i>0 && i/5==0){
+								paramsHtml+="</br>";
+							}
+						}
+						
+						
+						//判断是否有分页参数
+						if(hasPageParams){
+							$("#pageParams").show();
+						}else{
+							$("#pageParams").hide();
+						}
+						
+						//判断是否有申请微店参数
+						if(hasTinyParams){
+							$("#tinyParams").show();
+						}else{
+							$("#tinyParams").hide();
+						}
+					}
+					//展示参数
+					$('#paramsDiv').html(paramsHtml);
+					document.forms[0].action=node.url;
+					if(node.returnType=="false"){
+						$('#returnDataType').html("返回数据类型：<font color='red'>虚拟数据</font>");
+					}
+					if(node.returnType=="true"){
+						$('#returnDataType').html("返回数据类型：<font color='green'>真实数据</font>");
+					}
+					$('#returnDataType').show();
+					$('#submitDiv').show();
+				}else{					
+					$('#paramsDiv').html('');//清空参数
+					document.forms[0].action='';//清空提交url
+					$('#submitDiv').hide();//隐藏提交按钮
+					$('#returnDataType').hide();//隐藏返回数据类型
+				}
+				
+				$('#showResult').html("");
+			}
+
+		});	
+
+	function sendUrl(){
+		$('#showResult').html("数据加载中...");
+		//******加密密码部分********
+		 var url=document.getElementById('subForm').action;
+		 var minwenPassword="";
+		 if(url.indexOf("user/login")>0 || url.indexOf("user/new_regist_secondstep")>0 || url.indexOf("manage/withdraw/create_password")>0 ||url.indexOf("manage/withdraw/check_password")>0){
+			 minwenPassword=document.getElementById('subForm').password.value;
+			 var htmlobj=$.ajax({url:"user?with=getPassword&password="+minwenPassword,async:false});			
+			 document.getElementById('subForm').password.value=htmlobj.password;
+		 } 
+		 
+		 //************************
+		// publicParam = JSON.stringify($("#subForm").serializeArray()).replace(/\"/g,"");
+		 queryParam =  "";
+		 $("#paramsDiv").find("input").each(function(){
+			 queryParam = queryParam + "/"+encodeURIComponent($(this).attr("name"))+"/"+encodeURIComponent($(this).val());
+		 })
+		
+		$.ajax({
+				 headers: {
+					 "Accept": "application/json; charset=utf-8"
+				 },
+			     url:$('#subForm').attr('action')+queryParam,
+			     method:$("#reqType").val(),
+				 success:function(data){
+					 $('#showResult').val(JSON.stringify(data))
+				 },
+				 beforeSend: function(request) {
+					 var publicParam = {};
+					 $("#subForm").find("div:not([id='paramsDiv'])").find("input").each(function(){
+						 request.setRequestHeader('x-gomeplus-'+$(this).attr("id"),encodeURIComponent(JSON.stringify($(this).val())));
+						
+					 })
+					 
+					 
+				 }
+			 })
+		 document.getElementById('subForm').password.value=minwenPassword;
+		 // document.getElementById('subForm').submit();
+		 
+		 //*********提交完成，换回明文密码*********
+		 if(url.indexOf("user/login.json")>0 || url.indexOf("user/new_regist_secondstep.json")>0 || url.indexOf("manage/withdraw/create_password.json")>0 ||url.indexOf("manage/withdraw/check_password.json")>0){
+			 document.getElementById('subForm').password.value=minwenPassword;
+		}
+		 if(url.indexOf("user/update_password.json")>0||url.indexOf("user/reset_password.json")>0){
+			 document.getElementById('subForm').newPassword.value=minwenPassword;
+		 }
+		 if(url.indexOf("user/check_vcfor_update_psw.json")>0){
+			 document.getElementById('subForm').oldPassword.value=minwenPassword;
+		 }
+		 //***********************************
+		 
+	}
+	
+	function onIFrameLoaded(iframe) {
+	    var doc = iframe.contentWindow.document;
+	    var html = doc.body.innerHTML;
+	    if(html != null && html.length >10){
+	    	html = html.substring(html.indexOf('{'), html.length-6);
+    	}
+    	//wangwenbin payment add test----begain
+    	if(html.indexOf('alipay.wap.auth.authAndExecute')>=0 || html.indexOf('refund_fastpay_by_platform_nopwd')>=0){
+	    	var strJSON = html;//得到的JSON
+	    	var obj = new Function("return" + strJSON)();
+	    	$("#iframe1").attr("height","200");
+	    	$("#iframe1").attr("width","500");
+	    	$("#iframe1").attr("src",decodeHtml(obj.data));
+	    	//wangwenbin payment add test----end
+	    }else{
+	    	$('#showResult').html(html);
+	    }
+	}
+	//wangwenbin payment add test----begain
+	var HTML_DECODE = {"&lt;":"<","&gt;":">","&amp;":"&","&nbsp;":" ","&quot;":"\"","&quot;":"\"","&quot;":"\"","&copy;":"©"};
+	var REGX_HTML_DECODE = /&\w+;|&#(\d+);/g;
+	function decodeHtml (s){
+	      return (typeof s != "string") ? s :
+	          s.replace(REGX_HTML_DECODE,
+	                    function($0,$1){
+	                        var c = HTML_DECODE[$0];
+	                        if(c === undefined){
+	                            if(!isNaN($1)){
+	                                c = String.fromCharCode(($1 == 160) ? 32 : $1);
+	                            }else{
+	                                c = $0;
+	                            }
+	                        }
+	                        return c;
+	                    });
+	  };
+	//wangwenbin payment add test----end
+	
+	
+	
+	function showPublicParams(){
+		
+		$('#PublicParams').window({
+			title:"公共参数",
+			collapsible:false,
+			minimizable:false,
+			maximizable:false,
+		    width:600,   
+		    height:400,
+		    modal:true ,
+		    onClose:setPublicParams
+		}); 
+	}
+	function setPublicParams(){
+		$('#clientOs').val($('#clientOs2').val());
+		$('#clientOsVersion').val($('#clientOsVersion2').val());
+		$('#appType').val($('#appType2').val());
+		$('#appVersion').val($('#appVersion2').val());
+		$('#timeStamp').val($('#timeStamp2').val());
+		$('#userId').val($('#userId2').val());
+		$('#loginToken').val($('#loginToken2').val());
+		$('#phoneType').val($('#phoneType2').val());
+		$('#ip').val($('#ip2').val());
+		$('#devId').val($('#devId2').val());
+		$('#netType').val($('#netType2').val());
+		$('#mac').val($('#mac2').val());
+		$('#otherDevInfo').val($('#otherDevInfo2').val());
+		$('#pubPlat').val($('#pubPlat2').val());
+		
+	}
+	function showPageParams(){
+		
+		$('#PageParams').window({
+			title:"分页参数",
+			collapsible:false,
+			minimizable:false,
+			maximizable:false,
+		    width:600,   
+		    height:200,
+		    modal:true,
+		    onClose:setPageParams
+		});
+	}
+	function setPageParams(){
+		$('#pageNum').val($('#pageNum2').val());
+		$('#numPerPage').val($('#numPerPage2').val());
+		$('#lastRecordId').val($('#lastRecordId2').val());
+	}
+	
+	function showTinyParams(){
+		$('#TinyParams').window({
+			title:"申请微店参数",
+			collapsible:false,
+			minimizable:false,
+			maximizable:false,
+		    width:600,   
+		    height:200,
+		    modal:true,
+		    onClose:setTinyParams
+		});
+	}
+	function setTinyParams(){
+		$('#id').val($('#tinyId').val());
+		$('#shopName').val($('#shopName1').val());
+		$('#shopImg').val($('#shopImg1').val());
+		$('#userName').val($('#userName1').val());
+		$('#address').val($('#address1').val());
+		$('#longitude').val($('#longitude1').val());
+		$('#latitude').val($('#latitude1').val());
+	}
+	
+	
+</script>
+</html>

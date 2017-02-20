@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>com.gomeplus</groupId>
+		<artifactId>venus-restful-parent</artifactId>
+		<version>1.3-SNAPSHOT</version>
+	</parent>
+    
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.com.mx</groupId>
+    <artifactId>venus-admin</artifactId> 
+    <version>1.103-SNAPSHOT</version>
+    <packaging>war</packaging>
+    
+	<properties>
+		<!-- jar_version-->
+		<venus-image.version>1.5</venus-image.version>
+		<venus-logtrace-comm.verison>1.1</venus-logtrace-comm.verison>
+		
+	    <!--dubbo_version-->
+        <configuration_dubbo_version>1.3.0</configuration_dubbo_version>
+        <user_dubbo_version>1.49.0</user_dubbo_version>
+        <shop_dubbo_version>1.50.0</shop_dubbo_version>
+        <item_dubbo_version>1.35.0</item_dubbo_version>
+        <pay_dubbo_version>2.18.0</pay_dubbo_version>
+        <trade_dubbo_version>4.17.0</trade_dubbo_version>
+        <account_dubbo_version>1.13.0</account_dubbo_version>
+        <settlement_dubbo_version>2.22.0</settlement_dubbo_version>
+        <vshop_dubbo_version>1.9.0</vshop_dubbo_version>
+        <im_dubbo_version>1.8.0</im_dubbo_version>
+        <cms_dubbo_version>1.5.0</cms_dubbo_version>
+        <quest_dubbo_version>1.16.0</quest_dubbo_version>
+        <promotion_dubbo_version>1.33.0</promotion_dubbo_version>
+        <movieticket_dubbo_version>1.6.0</movieticket_dubbo_version>
+        <social_dubbo_version>1.48.0</social_dubbo_version>
+		<rebate_dubbo_version>3.0.0</rebate_dubbo_version>
+		<groupbuy_dubbo_version>1.11.0</groupbuy_dubbo_version>
+		<mission_dubbo_version>1.10.0</mission_dubbo_version>
+        <!--end-->
+        <venus-web-back.version>1.102</venus-web-back.version>
+
+	</properties>
+	
+    <dependencies>
+        <dependency>
+            <groupId>cn.com.mx</groupId>
+            <artifactId>venus-web-back</artifactId>
+            <version>${venus-web-back.version}</version>
+            </dependency>
+       <dependency>
+            <groupId>cn.com.mx</groupId>
+            <artifactId>venus-image</artifactId>
+            <version>${venus-image.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gomeplus</groupId>
+            <artifactId>venus-logtrace-comm</artifactId>
+            <version>${venus-logtrace-comm.verison}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+	        	<directory>src/main/temp</directory>
+	        	<filtering>false</filtering>
+	      </resource>
+        </resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<testFailureIgnore>true</testFailureIgnore>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <webResources>
+                        <webResource>
+                            <directory>src/main/webapp/WEB-INF</directory>
+                            <includes>
+                                <include>web.xml</include>
+                                <include>jetty-web.xml</include>
+                            </includes>
+                            <targetPath>WEB-INF</targetPath>
+                            <filtering>true</filtering>
+                        </webResource>
+                    </webResources>
+					<archive>
+						<!-- 增加编译代码的svn版本号 -->
+						<manifestEntries>
+							<svn_version>${svn_version}</svn_version>
+						</manifestEntries>
+					</archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.1.14.v20131031</version>
+                <configuration>
+                    <webApp>
+                        <contextPath>/admin</contextPath>
+                    </webApp>
+                    <war>${project.build.directory}/venus-admin-${project.version}</war>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+

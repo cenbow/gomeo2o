@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.mx.cms.platform.dao.impl.RecommendTitleDaoImpl" >
+  
+  <select id="selectByType" resultType="java.lang.String"	parameterType="java.lang.Integer">
+		select title
+		from cms_recommend_title
+		where type = #{type,jdbcType=INTEGER}
+	</select>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~ venus-cms -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- 读取配置文件 -->
+	<util:properties id="app" location="http://cfg-bs.dev.gomeplus.com/property/app.properties" />
+
+	<import resource="classpath:spring/venus-cms-persistence-context.xml" />
+	<import resource="classpath:spring/venus-cms-service-context.xml" />
+	<import resource="classpath:spring/venus-cms-interceptor-context.xml" />
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry id="central" address="#{app.dubboRegistry}"
+		protocol="zookeeper" />
+
+	<dubbo:protocol serialization="nativejava" name="dubbo"
+		port="#{app.cms_dubboPort}" threads="#{app.dubboThreads}" heartbeat="#{app.dubboHeartBeats}" />
+
+	<!-- 推荐位平台 -->
+	<dubbo:service ref="cmsPlatformManager"	interface="cn.com.mx.cms.platform.service.ICMSPlatformManager" />
+	
+	<dubbo:service ref="cmsRecomendService"	interface="cn.com.mx.cms.platform.service.ICMSRecommendService"/>
+	
+	<!-- 推荐位api -->
+	<dubbo:service ref="recommendFacade" interface="cn.com.mx.cms.recommend.service.IRecommendFacade"/>
+
+</beans>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.AccountInfoDaoImpl">
+
+	<resultMap type="AccountInfo" id="beanMap">
+		<id column="id" property="id" />
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="user_name" property="userName" javaType="String"/>
+		<result column="user_phone" property="userPhone" javaType="String"/>
+		<result column="pay_password" property="payPassword" javaType="String"/>
+		<result column="account_total" property="accountTotal" javaType="BigDecimal"/>
+		<result column="score_ba" property="scoreBa" javaType="BigDecimal"/>
+		<result column="score_fr" property="scoreFr" javaType="BigDecimal"/>
+		<result column="rebate_ba" property="rebateBa" javaType="BigDecimal"/>
+		<result column="rebate_fr" property="rebateFr" javaType="BigDecimal"/>
+		<result column="rebate_hy" property="rebateHy" javaType="BigDecimal"/>
+		<result column="money_ba" property="moneyBa" javaType="BigDecimal"/>
+		<result column="money_fr" property="moneyFr" javaType="BigDecimal"/>
+		<result column="state" property="state" javaType="Integer"/>
+		<result column="pay_error_date" property="payErrorDate" javaType="String"/>
+		<result column="pay_error_no" property="payErrorNo" javaType="Integer"/>
+	</resultMap>
+	<resultMap type="AccountInfo" id="accountInfoListMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="user_phone" property="userPhone" javaType="String"/>
+		<result column="user_name" property="userName" javaType="String"/>
+		<result column="score_ba" property="scoreBa" javaType="BigDecimal"/>
+		<result column="rebate_ba" property="rebateBa" javaType="BigDecimal"/>
+		<result column="couponSum" property="couponSum" javaType="Integer"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+	</resultMap>
+	
+	<insert id="addAccountInfo" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_account_info(version,user_id,user_phone,user_name,pay_password,state)
+		values(0,#{userId},#{userPhone},#{userName},#{payPassword},1)
+  	</insert>
+  	
+	<select id="listPage" parameterType="java.util.Map" resultMap="accountInfoListMap">
+		select s.id as id,s.user_id as user_id,s.user_phone as user_phone,s.user_name as user_name,s.rebate_ba as rebate_ba,s.score_ba as score_ba,
+		(select COUNT(i.id) from act_coupon_info i where i.user_id=s.user_id and i.state=2) as couponSum,s.update_time as updateTime
+		FROM act_account_info s
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and s.user_id = #{userId}
+			</if>
+			<if test="acStartUpdateTime!=null and acStartUpdateTime!=''"> 
+				<![CDATA[and s.update_time >=  DATE_FORMAT(#{acStartUpdateTime}, '%Y-%m-%d') ]]> 
+			</if> 
+			<if test="acEndUpdateTime!=null and acEndUpdateTime!=''"> 
+				<![CDATA[and s.update_time <  DATE_FORMAT(#{acEndUpdateTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+		order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(*) from act_account_info
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="acStartUpdateTime!=null and acStartUpdateTime!=''"> 
+				<![CDATA[and update_time >=  DATE_FORMAT(#{acStartUpdateTime}, '%Y-%m-%d') ]]> 
+			</if> 
+			<if test="acEndUpdateTime!=null and acEndUpdateTime!=''"> 
+				<![CDATA[and update_time <  DATE_FORMAT(#{acEndUpdateTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+	</select>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,account_total,score_ba,score_fr,rebate_ba,rebate_fr,rebate_hy,
+		money_ba,money_fr,state,user_phone,version,pay_password,user_name,pay_error_date,pay_error_no
+		from act_account_info 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,user_id,account_total,score_ba,score_fr,rebate_ba,rebate_fr,rebate_hy,
+		money_ba,money_fr,state, user_phone,version	,user_name,pay_error_date,pay_error_no
+		from act_account_info where id = #{id}
+  	</select>
+  	
+  	<update id="updateUserPassword" parameterType="Map">
+  		update act_account_info
+  		<set>
+			pay_password=#{payPassword}                 
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  		</where>
+  	</update>
+  	
+  	<update id="udpateAccountPayPasswordErrorNO" parameterType="Map">
+  		update act_account_info
+  		<set>
+			pay_error_date=#{payErrorDate},
+			pay_error_no = pay_error_no+1
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  		</where>
+  	</update>
+  	<update id="resetAccountPayPasswordErrorNO" parameterType="Map">
+  		update act_account_info
+  		<set>
+			pay_error_date=#{payErrorDate},
+			pay_error_no = 0
+  		</set>
+  		<where>
+  			1=1
+  		</where>
+  	</update>
+  	
+  	<update id="updateMoney" parameterType="Map">
+  		update act_account_info
+  		<set>
+			money_ba=money_ba+#{recordValue}                 
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  		</where>
+  	</update>
+  	<update id="editMoney" parameterType="Map">
+  		update act_account_info
+  		<set>
+			money_ba=money_fr-#{recordValue}                 
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and money_ba>=#{recordValue}             
+  		</where>
+  	</update>
+  	<update id="froozeMoney" parameterType="Map">
+  		update act_account_info
+  		<set>
+			money_ba=money_ba-#{recordValue},
+			money_fr=money_fr+#{recordValue}            
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and money_ba>=#{recordValue}
+  		</where>
+  	</update>
+  	
+  	<update id="updateScore" parameterType="Map">
+  		update act_account_info
+  		<set>
+			score_ba=score_ba+#{recordValue}                 
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  		</where>
+  	</update>
+  	<update id="editScore" parameterType="Map">
+  		update act_account_info
+  		<set>
+			score_ba=score_fr-#{recordValue}                 
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and score_ba>=#{recordValue}             
+  		</where>
+  	</update>
+  	<update id="froozeScore" parameterType="Map">
+  		update act_account_info
+  		<set>
+			score_ba=score_ba-#{recordValue},
+			score_fr=score_fr+#{recordValue}            
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and score_ba>=#{recordValue}
+  		</where>
+  	</update>
+  	
+  	<update id="updateRebate" parameterType="Map">
+  		update act_account_info
+  		<set>
+			rebate_ba=rebate_ba+#{recordValue},
+			rebate_hy=rebate_hy+#{rebateHy}  
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  		</where>
+  	</update>
+  	<update id="editRebate" parameterType="Map">
+  		update act_account_info
+  		<set>
+			rebate_fr=rebate_fr-#{recordValue}                 
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and rebate_fr>=#{recordValue}             
+  		</where>
+  	</update>
+  	<update id="froozeRebate" parameterType="Map">
+  		update act_account_info
+  		<set>
+			rebate_ba=rebate_ba-#{recordValue},
+			rebate_fr=rebate_fr+#{recordValue}            
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and rebate_ba>=#{recordValue}
+  		</where>
+  	</update>
+  	<update id="reSetfroozeRebate" parameterType="Map">
+  		update act_account_info
+  		<set>
+			rebate_ba=rebate_ba+#{recordValue},
+			rebate_fr=rebate_fr-#{recordValue}            
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and rebate_fr>=#{recordValue}
+  		</where>
+  	</update>
+  	
+</mapper>

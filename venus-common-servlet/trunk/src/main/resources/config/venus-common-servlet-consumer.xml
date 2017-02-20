@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:dubbo="http://gomeplus.com/schema/gomeplus-dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://gomeplus.com/schema/gomeplus-dubbo
+		http://gomeplus.com/schema/gomeplus-dubbo.xsd">
+   
+    <!-- 会员服务接口 -->
+	<dubbo:reference interface="cn.com.gome.user.service.UserBaseInfoFacade" id="userBaseInfoFacade" check="false" registry="central" />
+	
+	<!-- config -->
+	<dubbo:reference interface="io.terminus.ecp.config.service.ConfigReadService" id="configReadService" check="false" retries="0" registry="central" />
+	
+</beans>  

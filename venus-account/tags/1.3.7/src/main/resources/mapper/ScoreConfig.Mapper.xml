@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.ScoreConfigDaoImpl">
+	
+	<resultMap type="ScoreConfig" id="beanMap">
+		<id column="id" property="id" />
+		<result column="config_name" property="configName" javaType="String"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="reset_time" property="resetTime" javaType="Date"/>
+		<result column="reset_rule" property="resetRule" javaType="Integer"/>
+		<result column="reset_value" property="resetValue" javaType="Double"/>
+		<result column="is_mail" property="isMail" javaType="Integer"/>
+		<result column="is_sms" property="isSms" javaType="Integer"/>
+		<result column="is_system" property="isSystem" javaType="Integer"/>
+		<result column="notice_one" property="noticeOne" javaType="Date"/>
+		<result column="notice_two" property="noticeTwo" javaType="Date"/>
+		<result column="is_enable" property="isEnable" javaType="Integer"/>
+		<result column="state" property="state" javaType="Integer"/>
+	</resultMap>
+
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,state,reset_time,reset_rule,reset_value,is_mail,
+	    is_sms,is_system,notice_one,notice_two,is_enable,
+		update_time,create_time,config_name
+		from   act_score_config	order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	
+	<select id="queryScoreConfig" parameterType="ScoreConfig" resultMap="beanMap">
+		select id,state,reset_time,reset_rule,reset_value,is_mail,
+	    is_sms,is_system,notice_one,notice_two,is_enable,config_name,
+		update_time,create_time from act_score_config
+		<where>
+			1=1 
+			<if test=" resetTime!= null and resetTime!=''">
+				<![CDATA[ and reset_time<= #{resetTime} ]]> 
+			</if>
+			<if test=" isEnable != null and isEnable!=''">
+				and is_enable = #{isEnable}
+			</if>
+			<if test=" state!=null and state != ''">
+				and state = #{state}
+			</if>
+		</where>
+	</select>
+	
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_score_config
+	</select>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,state,reset_time,reset_rule,reset_value,is_mail,
+	    is_sms,is_system,notice_one,notice_two,is_enable,config_name,
+		update_time,create_time from act_score_config where id = #{id}
+  	</select>
+  	
+  	<update id="update" parameterType="ScoreConfig">
+		update act_score_config
+		<set>	
+			version = #{version}+1,
+		    reset_time = #{resetTime},
+		    reset_rule = #{resetRule},
+		    reset_value = #{resetValue},
+		    is_mail = #{isMail},
+		    is_sms = #{isSms},
+		    is_system = #{isSystem},
+		    notice_one = #{noticeOne},
+		    notice_two = #{noticeTwo},
+		    is_enable = #{isEnable},
+		    config_name = #{configName}
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<insert id="insert" parameterType="ScoreConfig" keyProperty="id" useGeneratedKeys="true">
+		insert into act_score_config (version,reset_time,reset_rule,reset_value,is_mail,
+		is_sms,is_system,notice_one,notice_two,is_enable,config_name) 
+		values (0,#{resetTime},#{resetRule},#{resetValue},#{isMail},
+		#{isSms},#{isSystem},#{noticeOne},#{noticeTwo},#{isEnable},#{configName})
+	</insert>
+	
+</mapper>

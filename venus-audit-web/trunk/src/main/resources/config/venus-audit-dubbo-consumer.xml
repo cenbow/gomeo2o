@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+	<!-- 读取配置文件 -->
+	<util:properties id="app" location="classpath:app.properties"/>
+    <dubbo:application name="venus-audit-web"/>
+    <!-- 注册中心地址 -->
+    <dubbo:registry id="gomeo2o" address="#{app.dubboRegistry}" protocol="zookeeper"/>
+	<!-- 读取ecp-configs配置 -->
+    <dubbo:reference registry="gomeo2o" retries="0" interface="io.terminus.ecp.config.service.ConfigReadService" id="configReadService"/>
+    <dubbo:reference registry="gomeo2o" retries="0" interface="io.terminus.ecp.config.service.ConfigWriteService" id="configWriteService"/>
+	<!-- 配置变化动态更新zookeeper -->
+	<bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+        <constructor-arg index="0" value="#{app.zookeeperAddress}"/>
+    </bean>
+     <!-- im相关服务start -->
+    <dubbo:reference interface="com.gomeo2o.facade.im.service.ImFacade"  id="imFacade"  check="false" registry="gomeo2o"/>
+     <!-- im相关服务end -->	
+    <dubbo:reference interface="cn.com.gome.user.service.UserBaseInfoFacade" id="userBaseInfoFacade" timeout="30000" check="false" registry="gomeo2o" />
+
+	<!-- 会员相关接口 start -->
+		<!-- 会员服务接口 -->
+		<!-- <dubbo:reference interface="cn.com.gome.user.service.UserBaseInfoFacade" id="userBaseInfoFacade" check="false" registry="gomeo2o" /> -->
+		<!-- 会员服务接口 -->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberShareRecordFacade" id="memberShareRecordFacade" check="false" registry="gomeo2o" />	
+		<!-- 行政区域 -->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberProvinceFacade" id="memberProvinceFacade" check="false" registry="gomeo2o" />	
+		<!-- 会员收获地址-->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberAddressFacade" id="memberAddressFacade" check="false" registry="gomeo2o" />	
+		<!-- 会员产品收藏-->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberGoodsFavoriteFacade" id="memberGoodsFavoriteFacade" check="false" registry="gomeo2o" />	
+		<!-- 会员店铺收藏-->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberShopFavoriteFacade" id="memberShopFavoriteFacade" check="false" registry="gomeo2o" />
+		<!-- 意见反馈 -->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberFeedBackFacade" id="memberFeedBackFacade" check="false" registry="gomeo2o" />
+		<!-- 商品分享 -->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberShareProductFacade" id="memberShareProductFacade" check="false" registry="gomeo2o" />
+		<!-- 店铺分享 -->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberShareShopFacade" id="memberShareShopFacade" check="false" registry="gomeo2o"/>
+		<!-- 组队 -->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberTeamFacade" id="memberTeamFacade" check="false" registry="gomeo2o"/>
+		<!-- 组队员 -->
+		<dubbo:reference interface="cn.com.gome.user.service.MemberTeamMembersFacade" id="memberTeamMembersFacade" check="false" registry="gomeo2o"/>
+	
+	<!-- 会员相关接口 end -->
+	
+	<!-- 社交-群组 -->
+		<dubbo:reference interface="cn.com.mx.social.group.service.ISocialGroupFacade" id="socialGroupFacade" check="false"  registry="gomeo2o"/>
+	<!-- 社交-话题 -->
+		<dubbo:reference interface="cn.com.mx.social.topic.service.ISocialTopicFacade" id="socialTopicFacade" check="false"  registry="gomeo2o"/>
+	<!-- 社交-广告 -->
+		<dubbo:reference interface="cn.com.mx.social.advertisement.service.ISocialadvertisementFacade" id="socialAdvertisementFacade" check="false" registry="gomeo2o"/>
+	<!-- 社交-外部挂载事件 -->
+		<dubbo:reference interface="cn.com.mx.social.events.service.IExternalEventsFacade" id="externalEventsFacade" check="false" registry="gomeo2o"/>
+
+	<!-- 微店相关接口 start -->
+		<dubbo:reference interface="com.gomeo2o.facade.vshop.service.VshopFacade" id="vshopFacade" check="false" registry="gomeo2o"/>
+	<!-- 微店相关接口 end -->
+	
+		<beans profile="dev,devDirect,test">  
+      		<dubbo:monitor protocol="registry" ></dubbo:monitor>
+		</beans>
+
+
+</beans>

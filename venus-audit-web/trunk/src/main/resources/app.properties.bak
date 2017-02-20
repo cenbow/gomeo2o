@@ -1,0 +1,48 @@
+
+#
+# pampas
+appName=venus-audit-web
+
+# log
+logLevel=${logLevel}
+dubboLogLevel=${dubboLogLevel}
+logRoot=${logRoot}
+logDefaultFile=${logDefaultFile}
+logAdditivity=${logAdditivity}
+
+# mysql
+jdbcDriver=${jdbcDriver}
+jdbcUrl=${jdbcUrl}
+jdbcUsername=${jdbcUsername}
+jdbcPassword=${jdbcPassword}
+
+# dbcp
+dbcpMaxIdle=${dbcpMaxIdle}
+dbcpMaxActive=${dbcpMaxActive}
+
+# redis
+redisHost=${redisHost}
+redisPort=${redisPort}
+redisMaxTotal=${redisMaxTotal}
+redisMaxIdle=${redisMaxIdle}
+redisMaxWaitMillis=${redisMaxWaitMillis}
+redisTestOnBorrow=${redisTestOnBorrow}
+redisTimeout=${redisTimeout}
+redisPassword=${redisPassword}
+redisServers=${redisServers}
+redisMaxRedirections=${redisMaxRedirections}
+
+# mongodb
+mongodbReplica=${mongodbReplica}
+mongodbName=${mongodbName}
+#mongodbUser=${mongodbUser}
+#mongodbPassword=${mongodbPassword}
+
+# dubbo
+dubboRegistry=${dubboRegistry}
+dubboPort=30006
+dubboThreads=${dubboThreads}
+dubboHeartBeats=${dubboHeartBeats}
+
+# zookeeper
+zookeeperAddress=${zookeeperAddress}

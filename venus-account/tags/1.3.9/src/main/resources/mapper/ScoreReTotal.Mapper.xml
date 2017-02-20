@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.ScoreReTotalDaoImpl">
+	<resultMap type="ScoreReTotal" id="beanMap">
+		<id column="id" property="id" />
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="rule_id" property="ruleId" javaType="Long"/>
+		<result column="total_top" property="totalTop" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,rule_id,total_top from act_score_re_total where id = #{id}
+  	</select>
+  	<select id="listBy" parameterType="Map" resultMap="beanMap">
+  		select id,rule_id,total_top from act_score_re_total where rule_id = #{ruleId}
+  	</select>
+  	
+  	<update id="update" parameterType="ScoreReTotal">
+		update act_score_re_total
+		<set>	
+			total_top = #{totalTop}
+		</set>
+		<where>
+			id = #{id} and rule_id = #{ruleId}
+		</where>
+	</update>
+	<insert id="insert" parameterType="ScoreReTotal" keyProperty="id" useGeneratedKeys="true">
+		insert into act_score_re_total (version,rule_id,total_top) 
+		values (0,#{ruleId},#{totalTop})
+	</insert>
+	
+</mapper>

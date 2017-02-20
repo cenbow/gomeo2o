@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.ScoreReSingleDaoImpl">
+	<resultMap type="ScoreReSingle" id="beanMap">
+		<id column="id" property="id" />
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="record_date" property="recordDate" javaType="String"/>
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="rule_id" property="ruleId" javaType="Long"/>
+		<result column="single_top" property="singleTop" javaType="Integer"/>
+		
+	</resultMap>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,record_date,user_id,rule_id,single_top 
+    	from act_score_re_single where id = #{id}
+  	</select>
+  	
+  	<select id="listBy" parameterType="Map" resultMap="beanMap">
+  		select id,record_date,user_id,rule_id,single_top  
+  		from act_score_re_single 
+  		where rule_id = #{ruleId} 
+  		and record_date = #{recordDate} 
+  		and user_id = #{userId}
+  	</select>
+  	
+  	<update id="update" parameterType="ScoreReSingle">
+		update act_score_re_single
+		<set>	
+		    single_top = #{singleTop}
+		</set>
+		<where>
+			id = #{id} and rule_id = #{ruleId}
+		</where>
+	</update>
+	<insert id="insert" parameterType="ScoreConfig" keyProperty="id" useGeneratedKeys="true">
+		insert into act_score_re_single (version,record_date,user_id,rule_id,single_top) 
+		values (0,#{recordDate},#{userId},#{ruleId},#{singleTop})
+	</insert>
+	
+</mapper>

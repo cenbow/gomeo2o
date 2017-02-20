@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~ Copyright (c) 2014 杭州端点网络科技有限公司 -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd	
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd	
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<context:component-scan base-package="cn.com.gome.admin" />
+
+	<bean id="setting" class="io.terminus.pampas.engine.Setting">
+		<property name="rootPath" value="#{app.assetsRootPath}" />
+		<property name="apps">
+			<util:list>
+				<bean class="io.terminus.pampas.engine.model.App">
+					<property name="key" value="gome-admin" />
+					<property name="judgePattern" value="^[\w\-]+\.ecp\.com$" />
+					<property name="assetsHome" value="rapidash" />
+				</bean>
+			</util:list>
+		</property>
+		<property name="devMode" value="true" />
+		<property name="registryId" value="central" />
+	</bean>
+
+    <bean class="cn.com.gome.web.common.handlebars.helper.GomeHbsHelper" />
+	<bean class="io.terminus.ecp.common.event.CoreEventDispatcher" primary="true"/>
+	<bean id="imageServer" class="com.gomeo2o.common.image.GomeImageServer" primary="true" />
+	
+	<util:properties id="app" location="classpath:app.properties"/>
+	<bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+        <constructor-arg index="0" value="#{app.zookeeperAddress}"/>
+    </bean>
+    <context:component-scan base-package="io.terminus.ecp.config.event"/>
+    <context:component-scan base-package="io.terminus.ecp.config.center"/>
+    <bean class="io.terminus.ecp.config.center.ConfigCenter" />
+	
+	<!-- AOP support -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    
+    <context:component-scan base-package="io.terminus.pampas.design">
+        <context:exclude-filter type="regex" expression="io.terminus.pampas.design.DRegister"/>
+    </context:component-scan>
+    
+    <import resource="classpath*:/pampas/engine-context.xml"/>
+    <import resource="classpath*:/pampas/register-context.xml"/>
+    <import resource="classpath:/spring/venus-admin-persistence-context.xml"/>
+    <import resource="classpath:/spring/venus-admin-dubbo-consumer.xml"/>
+
+    <aop:aspectj-autoproxy />
+    <context:component-scan base-package="io.terminus.ecp.common.validate"/>  
+    
+    <context:component-scan base-package="io.terminus.ecp.web.common.component" />
+    <context:component-scan base-package="io.terminus.ecp.web.common.image"/>
+    <context:component-scan base-package="io.terminus.ecp.web.common.design" />
+    
+    <bean id="pushMessageMq" class="cn.com.gome.admin.mq.PushMessageToImProducer" init-method="start"></bean>
+    
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:gome_messages</value>
+                <value>classpath:messages</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="3600">
+        </property>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    
+    <!-- add by jiale start-->
+    <util:properties id="app" location="classpath:app.properties"/>
+    
+    <!-- imgUrlConverter用于处理图片URL转换逻辑，包括FileID、FileName补全为完整的URL
+    	从app.properties获取urlPrefix（形如https://i6.meixincdn.com）
+    	和candidateSubdomains（备选二级域名列表，形如 i0,i1,i2...）
+     -->
+    <bean id="imgUrlConverter" class="com.gomeplus.venus.common.imageutil.UrlConverter">
+    	<constructor-arg value="#{app.imageutil_urlPrefix}" />
+    	<constructor-arg value="#{app.imageutil_candidateSubdomains}" />
+    </bean>
+    <!-- 以下配置用于将imgUrlConverter静态注入到Img,让Img兼容新逻辑 -->
+    <bean id = "imgUrlConverterInjector" class = "org.springframework.beans.factory.config.MethodInvokingFactoryBean" >
+         <property name = "staticMethod">
+         	<value>com.gomeo2o.common.utils.Img.setImageUrlConverter</value>
+         </property>
+         <property name = "arguments">
+             <ref bean = "imgUrlConverter"/>
+         </property>
+	</bean>
+	<!-- add by jiale end-->
+
+	<beans profile="test, prepub, prod">
+		<!--zookeeper beans-->
+		<bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+			<constructor-arg index="0" value="#{app.zkAddress}"/>
+		</bean>
+		<bean id="leadLatchInitiator" class="io.terminus.zookeeper.leader.LeadLatchInitiator">
+			<constructor-arg index="0" ref="zKClientFactory"/>
+			<constructor-arg index="1" value="#{app.zkPath}}"/>
+		</bean>
+		<bean id="hostLeader" class="io.terminus.zookeeper.leader.HostLeader" init-method="init">
+			<constructor-arg index="0" ref="leadLatchInitiator"/>
+		</bean>
+	</beans>
+
+</beans>

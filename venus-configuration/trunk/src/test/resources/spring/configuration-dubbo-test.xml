@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2014 杭州端点网络科技有限公司
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="app" location="classpath:app.properties"/>
+
+    <bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+        <constructor-arg index="0" value="#{app.zookeeperAddress}"/>
+    </bean>
+
+
+</beans>

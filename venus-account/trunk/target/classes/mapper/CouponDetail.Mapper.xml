@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.CouponDetailDaoImpl">
+
+	<resultMap type="CouponDetail" id="beanMap">
+		<id column="id" property="id" />
+		<result column="coupon_ecp_id" property="couponEcpId" javaType="Long"/>
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="detail_no" property="detailNo" javaType="String"/>
+		<result column="order_no" property="orderNo" javaType="String"/>
+		<result column="deal_time" property="dealTime" javaType="Date"/>
+		<result column="remark" property="remark" javaType="String"/>
+		<result column="creator" property="creator" javaType="String"/>
+		<result column="record_time" property="recordTime" javaType="Date"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="send_time" property="sendTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="state" property="state" javaType="Integer"/>
+		<result column="record_value" property="recordValue" javaType="BigDecimal"/>
+		<result column="coupon_type" property="couponType" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,coupon_ecp_id,user_id,detail_no,order_no,deal_time,remark,record_value,coupon_type,
+		creator,record_time,create_time,update_time,version,state,send_time	
+		from act_coupon_detail 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="couponEcpId != null and couponEcpId != ''">
+			 and coupon_ecp_id = #{couponEcpId}
+			</if>
+			<if test="orderNo != null and orderNo != ''">
+			 and order_no = #{orderNo}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 and create_time = #{createTime}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+	</select>
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,coupon_ecp_id,user_id,detail_no,order_no,deal_time,remark,record_value,coupon_type,
+		creator,record_time,create_time,update_time,version,state,send_time		
+		from act_coupon_detail 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 and create_time = #{createTime}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+		order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_coupon_detail
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="createTime != null and createTime != ''">
+			 and create_time = #{createTime}
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+	</select>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,user_id,account_total,score_ba,score_fr,rebate_ba,rebate_fr,record_value,
+		money_ba,money_fr,state, version,coupon_type,record_value,send_time	from act_coupon_detail where id = #{id}
+  	</select>
+  	
+  	<update id="updateCouponDetailState" parameterType="Map">
+  		update act_coupon_detail
+  		<set>
+			state=#{state}
+  		</set>
+  		<where>
+  			user_id = #{userId}
+  			and coupon_ecp_id = #{couponEcpId}
+  			and detail_no=#{detailNo}
+  		</where>
+  	</update>
+  	<insert id="addCouponDetail" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_coupon_detail(coupon_ecp_id,user_id,detail_no,order_no,record_value,deal_time,record_time,state,remark,creator,version,coupon_type,send_time)
+  		values(#{couponEcpId},#{userId},#{detailNo},#{orderNo},#{recordValue},#{dealTime},#{recordTime},#{state},#{remark},#{creator},0,#{couponType},#{sendTime})
+  	</insert>
+  	<insert id="insert" parameterType="CouponDetail" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_coupon_detail(coupon_ecp_id,user_id,detail_no,order_no,record_value,deal_time,record_time,state,remark,creator,version,coupon_type,send_time)
+  		values(#{couponEcpId},#{userId},#{detailNo},#{orderNo},#{recordValue},#{dealTime},#{recordTime},#{state},#{remark},#{creator},0,#{couponType},#{sendTime})
+  	</insert>
+</mapper>

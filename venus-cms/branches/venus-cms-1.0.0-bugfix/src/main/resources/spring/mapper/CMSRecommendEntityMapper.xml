@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.mx.cms.platform.dao.impl.RecommendDaoImpl">
+	<resultMap id="BaseResultMap" type="cn.com.mx.cms.entity.RecommendEntity">
+		<id column="id" property="recommendId" jdbcType="INTEGER" />
+		<result column="sn" property="sn" jdbcType="TINYINT" />
+		<result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+		<result column="extend_data" property="extendData" jdbcType="VARCHAR" />
+		<result column="is_disabled" property="isDisabled" jdbcType="TINYINT" />
+		<result column="cms_recommend_type_id" property="recommendType" jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_operator" property="createOperator" jdbcType="VARCHAR" />
+		<result column="update_operator" property="updateOperator" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, sn, picture_url, extend_data, is_disabled, cms_recommend_type_id,
+		create_time, update_time,
+		create_operator, update_operator
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from cms_recommend
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<!-- 生活推荐列表 -->
+	<select id="recommendList" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT sn,picture_url,extend_data,cms_recommend_type_id
+		FROM cms_recommend
+		<where>
+			<if test=" isDisabled != null"> and is_disabled = #{isDisabled}</if>
+			<if test=" recommendType != null"> and cms_recommend_type_id != #{recommendType}</if>
+		</where>
+		order by cms_recommend_type_id asc,sn asc
+	</select>
+	<!-- 找便宜-超级返推荐列表 -->
+	<select id="superRebateList" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT sn,picture_url,extend_data,cms_recommend_type_id
+		FROM cms_recommend
+		<where>
+			<if test=" isDisabled != null"> and is_disabled = #{isDisabled}</if>
+			<if test=" recommendType != null"> and cms_recommend_type_id = #{recommendType}</if>
+		</where>
+		order by sn asc
+	</select>
+	<select id="selectByRecommendType" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from cms_recommend
+		where cms_recommend_type_id = #{type,jdbcType=INTEGER}
+		and is_disabled = 0 order by sn
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from cms_recommend
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="cn.com.mx.cms.entity.RecommendEntity">
+		insert into cms_recommend (id, sn, picture_url,
+		extend_data, is_disabled, cms_recommend_type_id,
+		create_time, update_time, create_operator,
+		update_operator)
+		values (#{id,jdbcType=INTEGER}, #{sn,jdbcType=TINYINT},
+		#{pictureUrl,jdbcType=VARCHAR},
+		#{extendData,jdbcType=VARCHAR}, #{isDisabled,jdbcType=TINYINT}, #{recommentType,jdbcType=TINYINT},
+		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createOperator,jdbcType=VARCHAR},
+		#{updateOperator,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="cn.com.mx.cms.entity.RecommendEntity">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="recommendId">
+			SELECT LAST_INSERT_ID() AS recommendId
+		</selectKey>
+		insert into cms_recommend
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sn != null">
+				sn,
+			</if>
+			<if test="pictureUrl != null">
+				picture_url,
+			</if>
+			<if test="extendData != null">
+				extend_data,
+			</if>
+			<if test="isDisabled != null">
+				is_disabled,
+			</if>
+			<if test="recommendType != null">
+				cms_recommend_type_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createOperator != null">
+				create_operator,
+			</if>
+			<if test="updateOperator != null">
+				update_operator,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sn != null">
+				#{sn,jdbcType=TINYINT},
+			</if>
+			<if test="pictureUrl != null">
+				#{pictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="extendData != null">
+				#{extendData,jdbcType=VARCHAR},
+			</if>
+			<if test="isDisabled != null">
+				#{isDisabled,jdbcType=TINYINT},
+			</if>
+			<if test="recommendType != null">
+				#{recommendType,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createOperator != null">
+				#{createOperator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateOperator != null">
+				#{updateOperator,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.com.mx.cms.entity.RecommendEntity">
+		update cms_recommend
+		<set>
+			<if test="sn != null">
+				sn = #{sn,jdbcType=TINYINT},
+			</if>
+			<if test="pictureUrl != null">
+				picture_url = #{pictureUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="extendData != null">
+				extend_data = #{extendData,jdbcType=VARCHAR},
+			</if>
+			<if test="isDisabled != null">
+				is_disabled = #{isDisabled,jdbcType=TINYINT},
+			</if>
+			<if test="recommentType != null">
+				recomment_type = #{recommentType,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createOperator != null">
+				create_operator = #{createOperator,jdbcType=VARCHAR},
+			</if>
+			<if test="updateOperator != null">
+				update_operator = #{updateOperator,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.com.mx.cms.entity.RecommendEntity">
+		update cms_recommend
+		set sn = #{sn,jdbcType=TINYINT},
+		picture_url = #{pictureUrl,jdbcType=VARCHAR},
+		extend_data = #{extendData,jdbcType=VARCHAR},
+		is_disabled = #{isDisabled,jdbcType=TINYINT},
+		recomment_type = #{recommentType,jdbcType=TINYINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_operator = #{createOperator,jdbcType=VARCHAR},
+		update_operator = #{updateOperator,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 删除指定推荐位类型的库信息 -->
+	<delete id="deleteByRecType" parameterType="java.lang.Integer">
+		delete from cms_recommend
+		where cms_recommend_type_id = #{recommendType,jdbcType=INTEGER}
+	</delete>
+</mapper>

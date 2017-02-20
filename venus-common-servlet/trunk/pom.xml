@@ -1,0 +1,133 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.com.mx</groupId>
+		<artifactId>venus-base-servlet</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../../venus-base-servlet/trunk</relativePath>
+	</parent>
+
+
+	<artifactId>venus-common-servlet</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<!-- venus依赖 -->
+		<venus-user-api.version>1.0-SNAPSHOT</venus-user-api.version>
+		<venus-configuration-api.version>1.0-SNAPSHOT</venus-configuration-api.version>
+		<venus-web-common.version>1.0-SNAPSHOT</venus-web-common.version>
+		<venus-common.version>1.0-SNAPSHOT</venus-common.version>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-user-api</artifactId>
+			<version>${venus-user-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-configuration-api</artifactId>
+			<version>${venus-configuration-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-web-common</artifactId>
+			<version>${venus-web-common.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.terminus</groupId>
+					<artifactId>terminus-common</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet-api.version}</version>
+		</dependency>
+		<!-- Gcache服务 -->
+		<dependency>
+			<groupId>com.gome.service</groupId>
+			<artifactId>cache-service</artifactId>
+			<version>${gcache.version}</version>
+		</dependency>
+		<!-- Gcache服务 -->
+		<dependency>
+			<groupId>cn.com.mx</groupId>
+			<artifactId>venus-common</artifactId>
+			<version>${venus-common.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.terminus</groupId>
+					<artifactId>terminus-common</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- dubbo 需要的jar start -->
+		<dependency>
+			<groupId>org.jboss.netty</groupId>
+			<artifactId>netty</artifactId>
+			<version>${netty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+			<version>${dubbo.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<version>${zookeeper.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.101tec</groupId>
+			<artifactId>zkclient</artifactId>
+			<version>${tec-zkClient.version}</version>
+		</dependency>
+		<!-- dubbo 需要的jar end -->
+
+		<dependency>
+			<groupId>com.github.fge</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>2.2.6</version>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>gome</id>
+			<properties>
+				<initialMemorySize>256M</initialMemorySize>
+				<maxMemorySize>256M</maxMemorySize>
+			</properties>
+		</profile>
+	</profiles>
+</project>

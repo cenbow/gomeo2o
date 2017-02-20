@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.BindingBankCardDaoImpl">
+
+    <resultMap type="BindingBankCard" id="beanMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="user_name" property="userName" javaType="String"/>
+		<result column="support_bank_id" property="supportBankId" javaType="String"/>
+		<result column="card_no" property="cardNo" javaType="String"/>
+		<result column="last_four" property="lastFour" javaType="String"/>
+		<result column="certificate" property="certificate" javaType="String"/>
+		<result column="mobile" property="mobile" javaType="String"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="is_delete" property="isDelete" javaType="Integer"/>
+	</resultMap>
+	
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,user_name,support_bank_id,card_no,last_four,certificate,
+		mobile,version,is_delete
+		from act_binding_bank_card 
+		<where>
+			1=1
+			<if test="id != null and id != ''">
+			 and id = #{id}
+			</if>
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="cardNo != null and cardNo != ''">
+			 and card_no = #{cardNo}
+			</if>
+			<if test="isDelete != null ">
+			 and is_delete = #{isDelete}
+			</if>
+		</where>
+		order by create_time desc
+	</select>
+
+  	<insert id="addBindingBankCard" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_binding_bank_card(user_id,user_name,support_bank_id,card_no,last_four,certificate,mobile,version,is_delete)
+  		values(#{userId},#{userName},#{supportBankId},#{cardNo},#{lastFour},#{certificate},#{mobile},0,0)
+  	</insert>
+  	
+  	<update id="updateBindingBankCard" parameterType="Map">
+  		update act_binding_bank_card
+  		<set>
+  			<if test="isDelete != null and isDelete != ''">
+			 	is_delete = #{isDelete}
+			</if>
+  		</set>
+  		<where>
+  			1=1
+  			<if test="id != null and id != ''">
+			 	and id = #{id}
+			</if>
+			<if test="userId != null and userId != ''">
+			 	and user_id = #{userId}
+			</if>
+  		</where>
+  	</update>
+  	
+  
+</mapper>

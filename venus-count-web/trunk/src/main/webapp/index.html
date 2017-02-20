@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>redis计数器</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">    
+<meta http-equiv="Cache-Control" content="max-age=0" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script src="././resource/js/jquery.js" type="text/javascript" charset="UTF-8"></script>
+<script src="././resource/js/redisCount.js" type="text/javascript" charset="UTF-8"></script>
+<link rel="stylesheet" type="text/css" href="././resource/css/jquery.css"/>
+<link rel="stylesheet" type="text/css" href="././resource/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body>
+	<div style="width: 998px;margin: 50px auto;display: block;">
+		<div class="panel panel-default">
+		
+			<div class="panel-heading">社交模块</div>
+			   <ul class="list-group">
+			      <li class="list-group-item"><a href="#modal" data-url="topic" data-check="100"  title="群组下人数、话题数、话题回复数" data-parmas="" data-explain="">统计群组下人数、话题数、话题回复数 </a></li>
+			      <li class="list-group-item"><a href="#modal" data-url="topicSingle?type=0" data-check="0" title="统计群组下人数" data-parmas="see=0&sendGroupId=" data-explain="see=0表示执行统计后查看;see=1表示只查询">统计群组下人数</a></li>
+			      <li class="list-group-item"><a href="#modal" data-url="topicSingle?type=1" data-check="1" title="统计群组下话题" data-parmas="see=0&sendGroupId=" data-explain="see=0表示执行统计后查看;see=1表示只查询">统计群组下话题</a></li>
+			      <li class="list-group-item"><a href="#modal" data-url="topicSingle?type=2" data-check="2" title="统计群组下话题回复" data-parmas="see=0&sendGroupId=" data-explain="see=0表示执行统计后查看;see=1表示只查询;sendGroupId= 话题id后台统一取值">统计群组下话题回复</a></li>
+			   </ul>
+			</div>
+			
+			<div class="panel panel-default">
+			   <div class="panel-heading">商品模块</div>
+			   <ul class="list-group">
+			   		<li class="list-group-item"><a href="#modal" data-url="itemSaleCount" data-check="11"  title="商品销量数统计（全量）" data-parmas="" data-explain="">商品销量数统计（全量）</a></li>
+			   		<li class="list-group-item"><a href="#modal" data-url="itemSaleCountSingle" data-check="11"  title="商品销量数统计（单个）" data-parmas="type=1&itemId=" data-explain="type=1表示执行单个商品商品统计;type=2表示执行单个商品查询">商品销量数统计（单个）</a></li>
+			   		<li class="list-group-item"><a href="#modal" data-url="itemOnShelves" data-check="21"  title="店铺上架商品数（全量）" data-parmas="" data-explain="参数解释">店铺上架商品数 （全量）</a></li>
+			        <li class="list-group-item"><a href="#modal" data-url="itemOnShelvesSingle" data-check="21" title="店铺上架商品数（单个）" data-parmas="type=0&sendShopId=" data-explain="type=0执行统计后查看店铺内上架商品数;type=1只查看店铺内上架商品数">店铺上架商品数（单个）</a></li>
+			        <li class="list-group-item"><a href="#modal" data-url="proCollect" data-check="3" title="商品收藏数（全量）" data-parmas="" data-explain="">商品收藏数（全量）</a></li>	
+			        <li class="list-group-item"><a href="#modal" data-url="proCollectSingle" data-check="3" title="商品收藏数（单个）" data-parmas="type=1&productId=" data-explain="type=1表示执行单个商品商品统计，type=2表示执行单个商品查询；">商品收藏数（单个）</a></li>	
+			   </ul>
+			</div>
+			
+			<div class="panel panel-default">
+			   <div class="panel-heading">店铺收藏模块</div>
+			      <ul class="list-group">
+			      	<li class="list-group-item"><a href="#modal" data-url="shop" data-check="401"  title="收藏店铺计数" data-parmas="" data-explain="参数解释">统计收藏的所有店铺数 （全量）</a></li>
+			      	<li class="list-group-item"><a href="#modal" data-url="shopSingle" data-check="402" title="统计被收藏的次数" data-parmas="seeFlag=0&shopId=" data-explain="seeFlag=0表示执行统计后查看;seeFlag=1表示只查询">统计单个店铺被收藏的次数（单个）</a></li>
+			      </ul>
+			</div>
+			
+			<div class="panel panel-default">
+			   <div class="panel-heading">IM模块</div>
+			   <ul class="list-group">
+			   		<li class="list-group-item"><a href="#modal" data-url="imFriend/syncNumSingle" data-check="200" title="用户好友数（单个）" data-parmas="seeFlag=0&sendUserId=" data-explain="seeFlag=0表示执行统计后查看,seeFlag=1表示只查询">用户好友数（单个）</a></li>
+			   		<li class="list-group-item"><a href="#modal" data-url="imFriend/syncNum" data-check="201" title="用户好友数（全量）" data-parmas="" data-explain="">用户好友数（全量）</a></li>
+			   		<li class="list-group-item"><a href="#modal" data-url="imFans/syncNumSingle" data-check="202" title="用户粉丝数（单个）" data-parmas="seeFlag=0&sendUserId=" data-explain="seeFlag=0表示执行统计后查看,seeFlag=1表示只查询">用户粉丝数（单个）</a></li>
+			   		<li class="list-group-item"><a href="#modal" data-url="imFans/syncNum" data-check="203" title="用户粉丝数（全量）" data-parmas="" data-explain="">用户粉丝数（全量）</a></li>
+			   </ul>
+			</div>
+			
+			<div class="panel panel-default">
+			   <div class="panel-heading">爱生活模块</div>
+				   <ul class="list-group">
+				  		 <li class="list-group-item"><a href="#modal" data-url="snsinit" data-check="300"  title="爱生活帖子评论数、点赞数" data-parmas="" data-explain="爱生活帖子评论数、点赞数">统计爱生活帖子评论数、点赞数 </a></li>
+				  		 <li class="list-group-item"><a href="#modal" data-url="snsSingle?type=0" data-check="301"  title="爱生帖子评论数" data-parmas="see=0&postId=" data-explain="see=0表示执行统计后查看;see=1表示只查询">爱生帖子评论数 </a></li>
+				  		 <li class="list-group-item"><a href="#modal" data-url="snsSingle?type=1" data-check="302"  title="爱生帖子点赞数" data-parmas="see=0&postId=" data-explain="see=0表示执行统计后查看;see=1表示只查询">爱生帖子点赞数</a></li>
+				   </ul>
+			</div>
+			
+			<div class="panel panel-default">
+			   <div class="panel-heading">新IM数据同步模块</div>
+				   <ul class="list-group">
+				  		 <li class="list-group-item"><a href="#modal" data-url="imsyncdata?type=0" data-check="500"  title="同步群" data-parmas="" data-explain="">同步群 </a></li>
+				  		 <li class="list-group-item"><a href="#modal" data-url="imsyncdata?type=1" data-check="501"  title="同步群成员" data-parmas="" data-explain="">同步群成员</a></li>
+				   </ul>
+			</div>
+			
+			<div class="panel panel-default">
+			   <div class="panel-heading">会员模块</div>
+				   <ul class="list-group">
+				   		<li class="list-group-item"><a href="#modal" data-url="user/initinfosingle" data-check="600"  title="初始化数据（单个）" data-parmas="sendUserId=" data-explain="">单个初始化数据 </a></li>
+				  		<li class="list-group-item"><a href="#modal" data-url="user/initinfo" data-check="601"  title="初始化数据（全量）" data-parmas="" data-explain="">全量初始化数据 </a></li>
+				   </ul>
+			</div>
+	</div>
+	
+	<div id="modal" class="modal-demo" style='width: 600px;display: none;'>
+	    <a class="close" href="javaScript:;" title="点击关闭"><span>&times;</span></a>
+	    <h4 class="title"></h4>
+	    <div style="padding: 10px 10px 20px 10px;">
+		   <form class="bs-example bs-example-form" role="form" data-action="">
+		      <div id="leadLoad"></div>
+		      <div class="input-group" style="margin-bottom: 7px;margin-top: 3px;">
+		         <span class="input-group-addon">调用接口</span>
+		         <input type="text" class="form-control" disabled id="interface">
+		      </div>
+		      <div id="params"></div>
+			  <button type="button" class="btn btn-primary" id="execute" style="display: none;">执行</button>
+			  <button type="button" class="btn btn-danger" disabled  id="preventExecute" style="display: none;">正在执行</button>
+			  <p class="lead" id="leadResult" style="display: inline-block;margin-left: 10px;color: red;font-size: 18px;"></p>
+		   </form>
+		</div>
+	</div>
+</body>
+</html>

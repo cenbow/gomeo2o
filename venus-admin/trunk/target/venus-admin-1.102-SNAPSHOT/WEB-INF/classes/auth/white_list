@@ -1,0 +1,11 @@
+/login                    :post,get
+/api/user/login           :post
+/api/user/ldapLogin       :post
+/api/user/signup          :post
+/api/user/forgot-password :post
+/api/user/sms             :get
+/api/user/verify          :get
+/api/admin/sap/sap_notice :post
+/api/cms_set/cms_key    :post,get
+
+/api/initialization/getNotes    :get

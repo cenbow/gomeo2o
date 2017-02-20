@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~ Copyright (c) 2014 杭州端点网络科技有限公司 -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd	
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd	
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<context:component-scan base-package="cn.com.gome.admin" />
+
+	<bean id="setting" class="io.terminus.pampas.engine.Setting">
+		<property name="rootPath" value="#{app.assetsRootPath}" />
+		<property name="apps">
+			<util:list>
+				<bean class="io.terminus.pampas.engine.model.App">
+					<property name="key" value="gome-admin" />
+					<property name="judgePattern" value="^[\w\-]+\.ecp\.com$" />
+					<property name="assetsHome" value="rapidash" />
+				</bean>
+			</util:list>
+		</property>
+		<property name="devMode" value="true" />
+		<property name="registryId" value="central" />
+	</bean>
+
+    <bean class="cn.com.gome.web.common.handlebars.helper.GomeHbsHelper" />
+	<bean class="io.terminus.ecp.common.event.CoreEventDispatcher" primary="true"/>
+	<bean id="imageServer" class="com.gomeo2o.common.image.GomeImageServer" primary="true" />
+	
+	<util:properties id="app" location="classpath:app.properties"/>
+	<bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+        <constructor-arg index="0" value="#{app.zookeeperAddress}"/>
+    </bean>
+    <context:component-scan base-package="io.terminus.ecp.config.event"/>
+    <context:component-scan base-package="io.terminus.ecp.config.center"/>
+    <bean class="io.terminus.ecp.config.center.ConfigCenter" />
+	
+	<!-- AOP support -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    
+    <context:component-scan base-package="io.terminus.pampas.design">
+        <context:exclude-filter type="regex" expression="io.terminus.pampas.design.DRegister"/>
+    </context:component-scan>
+    
+    <import resource="classpath*:/pampas/engine-context.xml"/>
+    <import resource="classpath*:/pampas/register-context.xml"/>
+    <import resource="classpath:/spring/venus-admin-persistence-context.xml"/>
+    <import resource="classpath:/spring/venus-admin-dubbo-consumer.xml"/>
+
+    <aop:aspectj-autoproxy />
+    <context:component-scan base-package="io.terminus.ecp.common.validate"/>  
+    
+    <context:component-scan base-package="io.terminus.ecp.web.common.component" />
+    <context:component-scan base-package="io.terminus.ecp.web.common.image"/>
+    <context:component-scan base-package="io.terminus.ecp.web.common.design" />
+    
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:gome_messages</value>
+                <value>classpath:messages</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="3600">
+        </property>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+	<beans profile="test, prepub, prod">
+		<!--zookeeper beans-->
+		<bean id="zKClientFactory" class="io.terminus.zookeeper.ZKClientFactory">
+			<constructor-arg index="0" value="#{app.zkAddress}"/>
+		</bean>
+		<bean id="leadLatchInitiator" class="io.terminus.zookeeper.leader.LeadLatchInitiator">
+			<constructor-arg index="0" ref="zKClientFactory"/>
+			<constructor-arg index="1" value="#{app.zkPath}}"/>
+		</bean>
+		<bean id="hostLeader" class="io.terminus.zookeeper.leader.HostLeader" init-method="init">
+			<constructor-arg index="0" ref="leadLatchInitiator"/>
+		</bean>
+	</beans>
+
+</beans>

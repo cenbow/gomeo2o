@@ -1,0 +1,3 @@
+ALTER TABLE `act_account_info` MODIFY COLUMN `pay_password`  varchar(500)  NULL DEFAULT NULL COMMENT '支付密码' AFTER `user_phone`;
+ALTER TABLE `act_account_info` ADD COLUMN `rebate_hy`  decimal(16,4) NULL DEFAULT 0.0000 COMMENT ' 返利历史记录' AFTER `rebate_fr`;
+ALTER TABLE `act_advance_detail` MODIFY COLUMN `state`  int(11) NULL DEFAULT NULL COMMENT '提现状态 5：提现成功  4：打款成功，3：审核成功，2：审核失败，1：待审核，0：提现失败' AFTER `payoff_time`;

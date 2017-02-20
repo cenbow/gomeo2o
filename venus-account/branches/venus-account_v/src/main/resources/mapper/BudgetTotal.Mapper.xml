@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.BudgetTotalDaoImpl">
+
+	<resultMap type="BudgetTotal" id="beanMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="budget_no" property="budgetNo" javaType="String"/>
+		<result column="budget_total" property="budgetTotal" javaType="BigDecimal"/>
+		<result column="budget_ba" property="budgetBa" javaType="BigDecimal"/>
+		<result column="budget_fr" property="budgetFr" javaType="BigDecimal"/>
+		<result column="budget_type" property="budgetType" javaType="Integer"/>
+		<result column="start_time" property="startTime" javaType="Date"/>
+		<result column="end_time" property="endTime" javaType="Date"/>
+		<result column="market_limit" property="marketLimit" javaType="String"/>
+		<result column="isexcessed" property="isexcessed" javaType="Integer"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="state" property="state" javaType="Integer"/>
+		<result column="remark" property="remark" javaType="String"/>
+		<result column="vouc_code" property="voucCode" javaType="String"/>
+		<result column="budget_year" property="budgetYear" javaType="String"/>
+	</resultMap>
+	
+	<resultMap type="BudgetTotal" id="budgetTotalMap">
+		<id column="id" property="id" />
+		<result column="budget_no" property="budgetNo" javaType="String"/>
+		<result column="budget_total" property="budgetTotal" javaType="BigDecimal"/>
+		<result column="budget_ba" property="budgetBa" javaType="BigDecimal"/>
+		<result column="budget_fr" property="budgetFr" javaType="BigDecimal"/>
+		<result column="market_limit" property="marketLimit" javaType="String"/>
+		<result column="start_time" property="startTime" javaType="Date"/>
+		<result column="end_time" property="endTime" javaType="Date"/>
+	</resultMap>
+	
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,budget_no,budget_total,budget_ba,budget_fr,budget_type,start_time,end_time,
+		market_limit,isexcessed,create_time,update_time,version,state,remark	
+		from act_budget_total 
+		<where>
+			1=1
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+			<if test="budgetType != null and budgetType != ''">
+			 and budget_type = #{budgetType}
+			</if>
+			<if test="marketLimit != null and marketLimit != ''">
+			 and market_limit like CONCAT('%','${marketLimit}','%')
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+		order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_budget_total 
+		<where>
+			1=1
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+			<if test="budgetType != null and budgetType != ''">
+			 and budget_type = #{budgetType}
+			</if>
+			<if test="marketLimit != null and marketLimit != ''">
+			 and market_limit like CONCAT('%','${marketLimit}','%')
+			</if>
+			<if test="queryStartTime!=null and queryStartTime!=''">
+				<![CDATA[and create_time >=  DATE_FORMAT(#{queryStartTime}, '%Y-%m-%d') ]]> 
+			</if>
+			<if test="queryEndTime!=null and queryEndTime!=''">
+				<![CDATA[and create_time <  DATE_FORMAT(#{queryEndTime}, '%Y-%m-%d') ]]> 
+			</if>
+		</where>
+	</select>
+	<select id="queryBudgetTotal" parameterType="Map" resultMap="budgetTotalMap">
+		select id,budget_no,budget_total,budget_ba,budget_fr,budget_type,market_limit,start_time,end_time
+		from act_budget_total
+		<where>
+			1=1
+			<if test="budgetType!=null and budgetType!=''">
+				and budget_type = #{budgetType}
+			</if>
+			<if test="budgetType!=null and budgetType!=''">
+				and budget_type = #{budgetType}
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryBudgetTotalByParamer" parameterType="Map" resultMap="beanMap">
+		select id,user_id,budget_no,budget_total,budget_ba,budget_fr,budget_type,market_limit,
+		isexcessed,create_time,update_time,version,state,start_time,end_time
+		from act_budget_total
+		<where>
+			1=1
+			<if test="budgetNo!=null and budgetNo!=''">
+				and budget_no = #{budgetNo}
+			</if>
+			<if test="budgetYear!=null and budgetYear!=''">
+				and budget_year = #{budgetYear}
+			</if>
+			<if test="budgetType!=null and budgetType!=''">
+				and budget_type = #{budgetType}
+			</if>
+		</where>
+	</select>
+	
+  	<update id="updateFrBudgetInfo" parameterType="Map">
+  		update act_budget_total
+  		<set>
+  			budget_ba = budget_ba - #{recordValue},
+  			budget_fr = budget_fr + #{recordValue}
+  		</set>
+  		<where>
+  			budget_no = #{budgetNo} and budget_ba >= #{recordValue}
+  			and budget_year = date_format(#{budgetTime}, '%Y')
+  		</where>
+  	</update>
+  	<update id="updateCutBudgetInfo" parameterType="Map">
+  		update act_budget_total
+  		<set>
+  			budget_fr = budget_fr - #{recordValue}
+  		</set>
+  		<where>
+  			budget_no = #{budgetNo} and budget_fr >= #{recordValue}
+  			and budget_year = date_format(#{budgetTime}, '%Y')
+  		</where>
+  	</update>
+  	<update id="updateCutBudgetInfoNoFr" parameterType="Map">
+  		update act_budget_total
+  		<set>
+  			budget_ba = budget_ba - #{recordValue}
+  		</set>
+  		<where>
+  			budget_no = #{budgetNo} and budget_ba >= #{recordValue}
+  			and budget_year = date_format(#{budgetTime}, '%Y')
+  		</where>
+  	</update>
+  	<update id="updateReSetFrBudgetInfo" parameterType="Map">
+  		update act_budget_total
+  		<set>
+  			budget_ba = budget_ba + #{recordValue},
+  			budget_fr = budget_fr - #{recordValue}
+  		</set>
+  		<where>
+  			budget_no = #{budgetNo}
+  			and budget_year = date_format(#{budgetTime}, '%Y')
+  		</where>
+  	</update>
+  	
+  	<insert id="addBudgetTotal" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_budget_total(user_id,budget_no,market_limit,budget_total,budget_ba,budget_fr,budget_type,start_time,end_time,isexcessed,state,version,remark,vouc_code,budget_year)
+  		values(#{userId},#{budgetNo},#{marketLimit},#{budgetTotal},#{budgetBa},#{budgetFr},#{budgetType},#{startTime},#{endTime},0,1,0,#{remark},#{voucCode},#{budgetYear})
+  	</insert>
+  	
+  	<update id="updateBudgetTotal">
+  		update act_budget_total
+  		<set>
+  			budget_total = budget_total + #{budgetTotal},
+  			budget_ba = budget_ba + #{budgetTotal},
+  			budget_type = #{budgetType},
+  			start_time = #{startTime},
+  			end_time = #{endTime},
+  			market_limit = #{marketLimit}
+  		</set>
+  		<where>
+  			budget_no = #{budgetNo}	and budget_year = #{budgetYear}
+  		</where>
+  	</update>
+</mapper>

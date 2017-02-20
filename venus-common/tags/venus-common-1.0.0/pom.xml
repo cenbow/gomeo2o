@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.com.mx</groupId>
+		<artifactId>venus-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../../venus-parent</relativePath>
+	</parent>
+
+	<artifactId>venus-common</artifactId>
+	<version>${venus-common.version}</version>
+	<packaging>jar</packaging>
+
+	<build>
+		<finalName>venus-common</finalName>
+		<resources>
+			<resource>
+				<targetPath>${project.build.directory}/classes</targetPath>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+
+			<resource>
+				<targetPath>${project.build.directory}/classes/META-INF/dubbo</targetPath>
+				<directory>src/main/resources/dubbo</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>io.terminus.ecp</groupId>
+			<artifactId>ecp-common</artifactId>
+		</dependency>
+		<!-- MyBatis Dependency Begin -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+		</dependency>
+		<!-- MyBatis Dependency End -->
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

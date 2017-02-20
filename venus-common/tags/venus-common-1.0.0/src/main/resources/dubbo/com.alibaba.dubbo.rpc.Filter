@@ -1,0 +1,1 @@
+logaddsessionfilter=com.gomeo2o.common.dubbo.rpc.filter.LogAddSessionFilter

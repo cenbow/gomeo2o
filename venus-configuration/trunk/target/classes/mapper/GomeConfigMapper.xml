@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- ~ Copyright (c) 2014 杭州端点网络科技有限公司 -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="Config">
+	<resultMap id="GomeConfigMap" type="Config">
+		<id column="id" property="id" />
+		<result column="key" property="key" />
+		<result column="value" property="value" />
+		<result column="description" property="description" />
+		<result column="scope" property="scope" />
+		<result column="created_at" property="createdAt" />
+		<result column="updated_at" property="updatedAt" />
+	</resultMap>
+
+	<sql id="custom_sort_type">
+		<if test="sortType != null">
+			<if test="sortType == 1"> ASC </if>
+			<if test="sortType == 2"> DESC </if>
+		</if>
+	</sql>
+
+	<sql id="custom_sort">
+		<if test="sortBy != null">
+			<if test="sortBy == 'id'">
+				ORDER BY id
+				<include refid="custom_sort_type" />
+			</if>
+			<if test="sortBy == 'configKey'">
+				ORDER BY `key`
+				<include refid="custom_sort_type" />
+			</if>
+			<if test="sortBy == 'configValue'">
+				ORDER BY `value`
+				<include refid="custom_sort_type" />
+			</if>
+			<if test="sortBy == 'createdAt'">
+				ORDER BY created_at
+				<include refid="custom_sort_type" />
+			</if>
+			<if test="sortBy == 'updatedAt'">
+				ORDER BY updated_at
+				<include refid="custom_sort_type" />
+			</if>
+		</if>
+	</sql>
+
+	<sql id="criteria_for_config">
+		<where>
+			1 = 1
+			<if test="configKey != null"> AND `key` LIKE CONCAT('%', #{configKey},'%') </if>
+			<if test="configValue != null"> AND `value` LIKE CONCAT('%', #{configValue},'%') </if>
+			<if test="configDescription != null"> AND `description` LIKE CONCAT('%',
+				#{configDescription},'%') </if>
+			<if test="configScope != null"> AND `scope` LIKE CONCAT('%', #{configScope},'%') </if>
+		</where>
+	</sql>
+
+	<select id="countConfig" parameterType="map" resultType="long">
+		SELECT COUNT(1)
+		FROM
+		<include refid="tb" />
+		<include refid="criteria_for_config" />
+	</select>
+
+	<select id="pagingConfig" parameterType="map" resultMap="GomeConfigMap">
+		SELECT
+		<include refid="cols_all" />
+		FROM
+		<include refid="tb" />
+		<include refid="criteria_for_config" />
+		<include refid="custom_sort" />
+		LIMIT #{offset}, #{limit}
+	</select>
+
+
+
+</mapper>

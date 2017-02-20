@@ -1,0 +1,7 @@
+
+# waiting to complete
+auths:
+  - url : /.*
+    types:
+      - ADMIN
+      - OPERATOR

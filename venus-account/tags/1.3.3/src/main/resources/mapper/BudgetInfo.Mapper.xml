@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.BudgetInfoDaoImpl">
+
+	<resultMap type="BudgetInfo" id="beanMap">
+		<id column="id" property="id" />
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="budget_no" property="budgetNo" javaType="String"/>
+		<result column="budget_value" property="budgetValue" javaType="BigDecimal"/>
+		<result column="budget_type" property="budgetType" javaType="Integer"/>
+		<result column="start_time" property="startTime" javaType="Date"/>
+		<result column="end_time" property="endTime" javaType="Date"/>
+		<result column="market_limit" property="marketLimit" javaType="String"/>
+		<result column="remark" property="remark" javaType="String"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="state" property="state" javaType="Integer"/>
+	</resultMap>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,budget_no,budget_value,budget_type,start_time,end_time,
+		market_limit,remark,create_time,update_time,version,state	
+		from act_budget_info 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+		</where>
+	</select>
+	<select id="listPage" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,budget_no,budget_value,budget_type,start_time,end_time,
+		market_limit,remark,create_time,update_time,version,state	
+		from act_budget_info 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+		</where>
+		order by id desc 
+		limit #{pageFirst} , #{pageSize} 
+	</select>
+	<select id="listPageCount" parameterType="java.util.Map" resultType="long">
+		select count(1) from act_budget_info
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+			<if test="budgetNo != null and budgetNo != ''">
+			 and budget_no = #{budgetNo}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getById" parameterType="long" resultMap="beanMap">
+    	select id,user_id,account_total,score_ba,score_fr,rebate_ba,rebate_fr,
+		money_ba,money_fr,state, version	from act_budget_info where id = #{id}
+  	</select>
+  	
+  	<insert id="addBudgetInfo" parameterType="Map" keyProperty="id" useGeneratedKeys="true">
+  		insert into act_budget_info(user_id,budget_no,budget_value,budget_type,start_time,end_time,market_limit,remark,state)
+  		values(#{userId},#{budgetNo},#{budgetValue},#{budgetType},#{startTime},#{endTime},#{marketLimit},#{remark},0)
+  	</insert>
+  	
+</mapper>

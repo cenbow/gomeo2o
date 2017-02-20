@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gomeo2o.service.account.dao.impl.MoneyDetailDaoImpl">
+
+	<resultMap type="MoneyDetail" id="beanMap">
+		<id column="id" property="id" />
+		<result column="version" property="version" javaType="Integer"/>
+		<result column="user_id" property="userId" javaType="Long"/>
+		<result column="order_no" property="orderNo" javaType="String"/>
+		<result column="deal_time" property="dealTime" javaType="Date"/>
+		<result column="recore_time" property="recoreTime" javaType="Date"/>
+		<result column="deal_remark" property="dealRemark" javaType="String"/>
+		<result column="record_rule" property="recordRule" javaType="Integer"/>
+		<result column="record_value" property="recordValue" javaType="BigDecimal"/>
+		<result column="state" property="state" javaType="Integer"/>
+		<result column="detail_no" property="detailNo" javaType="String"/>
+		<result column="deal_type" property="dealType" javaType="Integer"/>
+		<result column="creator" property="creator" javaType="String"/>
+		<result column="update_time" property="updateTime" javaType="Date"/>
+		<result column="create_time" property="createTime" javaType="Date"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="MoneyDetail" keyProperty="id" useGeneratedKeys="true">
+		insert into money_detail (user_id,deal_time,record_time,deal_remark,record_rule,record_value,state,version,detail_no,deal_type,creator) 
+		values (#{userId},#{dealTime},#{recordTime},#{dealRemark},#{recordRule},#{recordValue},#{state},'0',#{detailNo},#{dealType},#{creator})
+	</insert>
+	
+	<update id="update">
+		update money_detail
+		<set>
+			user_id = #{userId},
+			deal_time = #{dealTime},
+			record_time = #{recordTime},
+			deal_remark = #{dealRemark},
+			record_rule = #{recordRule},
+			record_value = #{recordValue},
+			state = #{state},
+			detail_no=#{detailNo},
+			deal_type=#{dealType},
+			creator=#{creator},
+			version = #{version}+1
+		</set>
+		<where>
+			 detail_no = #{detailNo} and user_id = #{userId} and version = #{version}
+		</where>
+	</update>
+	
+	<select id="listBy" parameterType="java.util.Map" resultMap="beanMap">
+		select id,user_id,deal_time,record_time,deal_remark,record_rule,record_value,state,detail_no,
+			deal_type,creator,version
+		from money_detail 
+		<where>
+			1=1
+			<if test="userId != null and userId != ''">
+			 and user_id = #{userId}
+			</if>
+		</where>
+	</select>
+	
+</mapper>
